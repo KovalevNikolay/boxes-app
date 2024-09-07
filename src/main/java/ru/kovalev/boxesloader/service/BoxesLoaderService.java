@@ -76,10 +76,10 @@ public class BoxesLoaderService {
         return false;
     }
 
-    private int getMaxBoxLength(int[][] box) {
+    private int getMaxBoxLength(int[][] boxDimensions) {
         int maxBoxLength = 0;
-        for (int i = 0; i < box.length; i++) {
-            maxBoxLength = Math.max(box[i].length, maxBoxLength);
+        for (int[] boxSize : boxDimensions) {
+            maxBoxLength = Math.max(boxSize.length, maxBoxLength);
         }
         return maxBoxLength;
     }
