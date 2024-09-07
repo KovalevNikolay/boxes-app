@@ -16,7 +16,7 @@ class BoxesLoaderServiceTest {
 
     @Test
     void trucksEmptyIfInputFileEmpty() {
-        Path path = Path.of("src", "test", "resources", "empty.txt");
+        Path path = Path.of("src", "test", "resources", "for_empty_trucks.txt");
         boxes = BoxesManager.getBoxes(path);
         List<Truck> trucks = boxesLoaderService.distributeBoxesToTruck(boxes);
         assertThat(trucks).isEmpty();
@@ -24,7 +24,7 @@ class BoxesLoaderServiceTest {
 
     @Test
     void boxesAreLoadedIntoOneTruck() {
-        Path path = Path.of("src", "test", "resources", "one_trucks.txt");
+        Path path = Path.of("src", "test", "resources", "for_one_trucks.txt");
         boxes = BoxesManager.getBoxes(path);
         List<Truck> trucks = boxesLoaderService.distributeBoxesToTruck(boxes);
         assertThat(trucks).hasSize(1);
@@ -32,7 +32,7 @@ class BoxesLoaderServiceTest {
 
     @Test
     void twoTrucksIfBoxDoesNotFit() {
-        Path path = Path.of("src", "test", "resources", "two_trucks.txt");
+        Path path = Path.of("src", "test", "resources", "for_two_trucks.txt");
         boxes = BoxesManager.getBoxes(path);
         List<Truck> trucks = boxesLoaderService.distributeBoxesToTruck(boxes);
         assertThat(trucks).hasSize(2);
