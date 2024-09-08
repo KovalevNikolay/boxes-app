@@ -1,9 +1,12 @@
 package ru.kovalev.boxesloader.util;
 
+import ru.kovalev.boxesloader.validator.DataValidator;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -45,24 +48,31 @@ public final class BoxesManager {
     private static List<String> readBoxes(Path path) {
         try {
             List<String> strings = Files.readAllLines(path);
-            List<String> result = new ArrayList<>();
-            int index = 0;
-            while (index < strings.size()) {
-                StringBuilder box = new StringBuilder();
-                String current = strings.get(index);
-                while (!current.isEmpty()) {
-                    box.append(current);
-                    index++;
-                    if (index < strings.size()) {
-                        current = strings.get(index);
-                    } else {
-                        break;
+            boolean isValid = DataValidator.isValidData(strings);
+            if (isValid) {
+                List<String> result = new ArrayList<>();
+                int index = 0;
+                while (index < strings.size()) {
+                    StringBuilder box = new StringBuilder();
+                    String current = strings.get(index);
+                    if (!current.isEmpty()) {
+                        while (!current.isEmpty()) {
+                            box.append(current);
+                            index++;
+                            if (index < strings.size()) {
+                                current = strings.get(index);
+                            } else {
+                                break;
+                            }
+                        }
+                        result.add(box.toString());
+                        index++;
                     }
                 }
-                result.add(box.toString());
-                index++;
+                return result;
+            } else {
+                return Collections.emptyList();
             }
-            return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
