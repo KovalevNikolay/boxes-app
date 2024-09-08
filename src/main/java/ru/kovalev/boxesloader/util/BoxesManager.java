@@ -68,7 +68,7 @@ public final class BoxesManager {
         }
     }
 
-    public static int[][] getSize(String boxWeight) {
+    public static int[][] getBoxDimensions(String boxWeight) {
         return SIZE_BOXES.get(boxWeight);
     }
 }

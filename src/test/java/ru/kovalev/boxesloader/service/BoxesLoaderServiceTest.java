@@ -5,6 +5,7 @@ import ru.kovalev.boxesloader.model.Truck;
 import ru.kovalev.boxesloader.util.BoxesManager;
 
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ class BoxesLoaderServiceTest {
     void trucksEmptyIfInputFileEmpty() {
         Path path = Path.of("src", "test", "resources", "for_empty_trucks.txt");
         boxes = BoxesManager.getBoxes(path);
-        List<Truck> trucks = boxesLoaderService.distributeBoxesToTruck(boxes);
+        List<Truck> trucks = boxesLoaderService.distributeBoxes(boxes);
         assertThat(trucks).isEmpty();
     }
 
@@ -26,7 +27,7 @@ class BoxesLoaderServiceTest {
     void boxesAreLoadedIntoOneTruck() {
         Path path = Path.of("src", "test", "resources", "for_one_trucks.txt");
         boxes = BoxesManager.getBoxes(path);
-        List<Truck> trucks = boxesLoaderService.distributeBoxesToTruck(boxes);
+        List<Truck> trucks = boxesLoaderService.distributeBoxes(boxes);
         assertThat(trucks).hasSize(1);
     }
 
@@ -34,7 +35,7 @@ class BoxesLoaderServiceTest {
     void twoTrucksIfBoxDoesNotFit() {
         Path path = Path.of("src", "test", "resources", "for_two_trucks.txt");
         boxes = BoxesManager.getBoxes(path);
-        List<Truck> trucks = boxesLoaderService.distributeBoxesToTruck(boxes);
+        List<Truck> trucks = boxesLoaderService.distributeBoxes(boxes);
         assertThat(trucks).hasSize(2);
     }
 }
