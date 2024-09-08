@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class BoxesLoaderService {
     private static final BoxesLoaderService INSTANCE = new BoxesLoaderService();
@@ -41,7 +42,6 @@ public class BoxesLoaderService {
                 countBoxesCurrentSize--;
             }
         }
-
         return trucks;
     }
 
@@ -51,52 +51,68 @@ public class BoxesLoaderService {
         int[][] boxDimensions = BoxesManager.getBoxDimensions(boxKey);
         int boxHeight = boxDimensions.length;
         int boxLength = getMaxBoxLength(boxDimensions);
-        boolean isLoaded = false;
-        boolean isSupported;
-        String current;
 
-        outerLoop:
+        Optional<int[]> position = findPositionForBox(truckBody, boxHeight, boxLength);
+
+        if (position.isEmpty()) {
+            return false;
+        }
+
+        performLoading(boxKey, truckBody, boxDimensions, position.get()[0], position.get()[1]);
+        return true;
+    }
+
+    private Optional<int[]> findPositionForBox(String[][] truckBody, int boxHeight, int boxLength) {
         for (int i = truckBody.length - 1; i >= boxHeight - 1; i--) {
-            int right = 0;
             int left = Integer.MIN_VALUE;
+            int right = 0;
+
             while (right < truckBody[i].length) {
-
-                current = truckBody[i][right];
-
-                if (boxLength == 1 && current.isEmpty()) {
-                    isSupported = (i == truckBody.length - 1) || isThereSupport(truckBody[i + 1], boxLength, right, right);
-
+                if (isBoxFit(truckBody, i, right, boxHeight, boxLength)) {
+                    boolean isSupported = (i == truckBody.length - 1)
+                                          || isThereSupport(truckBody[i + 1], boxLength, right - boxLength + 1, right);
                     if (isSupported) {
-                        performLoading(boxKey, truckBody, boxDimensions, i, right);
-                        isLoaded = true;
-                        break outerLoop;
+                        return Optional.of(new int[]{i, right - boxLength + 1});
                     }
                 }
 
-                if (right - left + 1 == boxLength) {
-                    isSupported = (i == truckBody.length - 1) || isThereSupport(truckBody[i + 1], boxLength, left, right);
-
-                    if (isSupported) {
-                        performLoading(boxKey, truckBody, boxDimensions, i, left);
-                        isLoaded = true;
-                        break outerLoop;
-                    } else {
-                        left++;
-                    }
-                }
-
-                if (current.isEmpty()) {
-                    if (left < 0) {
+                if (truckBody[i][right].isEmpty()) {
+                    if (left == Integer.MIN_VALUE) {
                         left = right;
                     }
                 } else {
                     left = Integer.MIN_VALUE;
                 }
+
                 right++;
             }
         }
+        return Optional.empty();
+    }
 
-        return isLoaded;
+    private boolean isBoxFit(String[][] truckBody, int row, int right, int boxHeight, int boxLength) {
+        int left = right - boxLength + 1;
+
+        if (left < 0 || !isEmptySpace(truckBody[row], left, right)) {
+            return false;
+        }
+
+        for (int h = 0; h < boxHeight; h++) {
+            if (!isEmptySpace(truckBody[row - h], left, right)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isEmptySpace(String[] row, int left, int right) {
+        for (int i = left; i <= right; i++) {
+            if (!row[i].isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void performLoading(String boxKey, String[][] truckBody, int[][] boxDimensions, int vertical, int left) {
