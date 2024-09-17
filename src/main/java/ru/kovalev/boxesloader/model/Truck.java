@@ -21,9 +21,7 @@ public class Truck {
             stringBuilder.append("+\n");
         }
 
-        for (int i = 0; i < body.length + 2; i++) {
-            stringBuilder.append("+");
-        }
+        stringBuilder.append("+".repeat(Math.max(0, body.length + 2)));
 
         return stringBuilder.toString();
     }

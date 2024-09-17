@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 public class DataValidator {
     private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
 
+    private DataValidator() {
+    }
     public static boolean isValidData(List<String> strings) {
         boolean isPreviousEmpty = false;
         for (String string : strings) {

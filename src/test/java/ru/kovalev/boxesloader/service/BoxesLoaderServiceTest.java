@@ -5,17 +5,14 @@ import ru.kovalev.boxesloader.model.Truck;
 import ru.kovalev.boxesloader.util.BoxesManager;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BoxesLoaderServiceTest {
-    private List<String> boxes;
     private static final BoxesLoaderService boxesLoaderService = new BoxesLoaderService();
     private static final int TRUCK_BODY_SIZE = 6;
+    private List<String> boxes;
 
     @Test
     void whenBoxesIsEmptyThenTrucksIsEmpty() {
