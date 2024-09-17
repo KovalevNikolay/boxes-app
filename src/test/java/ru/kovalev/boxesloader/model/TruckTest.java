@@ -6,12 +6,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TruckTest {
     @Test
-    void fieldsTruckBodyIsNotNull() {
+    void bodyLengthEqualBodySize() {
         int bodySize = 6;
         Truck truck = new Truck(bodySize);
         String[][] body = truck.getBody();
-        for (String[] strings : body) {
-            assertThat(strings).isEqualTo(new String[bodySize]);
-        }
+        assertThat(body.length).isEqualTo(bodySize);
     }
 }
