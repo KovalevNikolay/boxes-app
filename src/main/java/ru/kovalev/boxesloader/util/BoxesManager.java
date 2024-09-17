@@ -28,20 +28,18 @@ public final class BoxesManager {
     private BoxesManager() {
     }
 
-    public static Map<String, Integer> getBoxes(Path path) {
+    public static List<String> getBoxes(Path path) {
         List<String> boxes = readBoxes(path);
-        Map<String, Integer> result = new TreeMap<>(Comparator.reverseOrder());
+        List<String> result = new ArrayList<>();
 
         for (String box : boxes) {
             String currentBox = box.substring(0, 1);
 
-            if (result.containsKey(currentBox)) {
-                Integer count = result.get(currentBox);
-                result.put(currentBox, ++count);
-            } else {
-                result.put(currentBox, 1);
-            }
+            result.add(currentBox);
         }
+
+        result.sort(Comparator.reverseOrder());
+
         return result;
     }
 

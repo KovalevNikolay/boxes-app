@@ -3,7 +3,6 @@ package ru.kovalev.boxesloader.validator;
 import ru.kovalev.boxesloader.exception.ValidationException;
 
 import java.util.List;
-import java.util.Map;
 
 public class DataValidator {
     private static final String DIGIT_REGEX = "\\d+";

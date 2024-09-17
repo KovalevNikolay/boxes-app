@@ -6,17 +6,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TruckTest {
     @Test
-    void truckIsEmptyIfBoxNoAdd() {
-        Truck truck = new Truck();
-        assertThat(truck.isEmpty()).isTrue();
-    }
-
-    @Test
     void fieldsTruckBodyIsNotNull() {
-        Truck truck = new Truck();
+        int bodySize = 6;
+        Truck truck = new Truck(bodySize);
         String[][] body = truck.getBody();
         for (String[] strings : body) {
-            assertThat(strings).isEqualTo(new String[] {"", "", "", "", "", ""});
+            assertThat(strings).isEqualTo(new String[bodySize]);
         }
     }
 }

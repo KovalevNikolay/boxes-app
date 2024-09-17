@@ -1,31 +1,12 @@
 package ru.kovalev.boxesloader.model;
 
-import java.util.Arrays;
+import java.util.Objects;
 
 public class Truck {
-    private static final int TRUCK_BODY_SIZE = 6;
     private final String[][] body;
 
-    public Truck() {
-        body = new String[TRUCK_BODY_SIZE][TRUCK_BODY_SIZE];
-        initBody();
-    }
-
-    private void initBody() {
-        for (String[] strings : body) {
-            Arrays.fill(strings, "");
-        }
-    }
-
-    public boolean isEmpty() {
-        for (String[] strings : body) {
-            for (String string : strings) {
-                if (!string.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public Truck(int bodySize) {
+        body = new String[bodySize][bodySize];
     }
 
     @Override
@@ -35,11 +16,14 @@ public class Truck {
         for (String[] strings : body) {
             stringBuilder.append("+");
             for (String string : strings) {
-                stringBuilder.append(string.isEmpty() ? " " : string);
+                stringBuilder.append(Objects.isNull(string) ? " " : string);
             }
             stringBuilder.append("+\n");
         }
-        stringBuilder.append("++++++++");
+
+        for (int i = 0; i < body.length + 2; i++) {
+            stringBuilder.append("+");
+        }
 
         return stringBuilder.toString();
     }
