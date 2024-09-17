@@ -1,13 +1,13 @@
 package ru.kovalev.boxesloader.service;
 
 import org.junit.jupiter.api.Test;
+import ru.kovalev.boxesloader.exception.OversizedBoxException;
 import ru.kovalev.boxesloader.model.Truck;
 import ru.kovalev.boxesloader.util.BoxesManager;
-
 import java.nio.file.Path;
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BoxesLoaderServiceTest {
     private static final BoxesLoaderService boxesLoaderService = new BoxesLoaderService();
@@ -50,5 +50,20 @@ class BoxesLoaderServiceTest {
         boxes = BoxesManager.getBoxes(path);
         List<Truck> trucks = boxesLoaderService.distributeBoxes(boxes, TRUCK_BODY_SIZE);
         assertThat(trucks).hasSize(2);
+    }
+
+    @Test
+    void whenFiveBoxesThenFiveTrucks() {
+        boxes = List.of("1", "2", "3", "9", "2");
+        List<Truck> trucks = boxesLoaderService.distributeHowOneTruckOneBox(boxes, TRUCK_BODY_SIZE);
+        assertThat(trucks).hasSize(boxes.size());
+    }
+
+    @Test
+    void whenSizeBoxesMoreThenSizeTruckBody() {
+        boxes = List.of("9");
+        assertThatThrownBy(() -> boxesLoaderService.distributeHowOneTruckOneBox(boxes, 1))
+                .isInstanceOf(OversizedBoxException.class)
+                .hasMessageContaining("Габариты посылки не могут превышать размеры кузова.");
     }
 }

@@ -1,5 +1,6 @@
 package ru.kovalev.boxesloader.service;
 
+import ru.kovalev.boxesloader.exception.OversizedBoxException;
 import ru.kovalev.boxesloader.model.Truck;
 import ru.kovalev.boxesloader.util.BoxesManager;
 import ru.kovalev.boxesloader.util.TruckSpaceFinder;
@@ -37,11 +38,30 @@ public class BoxesLoaderService {
         return trucks;
     }
 
+    public List<Truck> distributeHowOneTruckOneBox(List<String> boxes, int truckBodySize) {
+        if (boxes == null || boxes.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Truck> trucks = new ArrayList<>();
+
+        for (String box : boxes) {
+            Truck truck = new Truck(truckBodySize);
+            loadToTruck(box, truck);
+            trucks.add(truck);
+        }
+
+        return trucks;
+    }
     private boolean loadToTruck(String box, Truck truck) {
         String[][] truckBody = truck.getBody();
         int[][] boxDimensions = BoxesManager.getBoxDimensions(box);
         int boxHeight = boxDimensions.length;
         int boxLength = getMaxBoxLength(boxDimensions);
+
+        if (boxHeight > truckBody.length || boxLength > truckBody[0].length) {
+            throw new OversizedBoxException("Габариты посылки не могут превышать размеры кузова.");
+        }
 
         int[] position = TruckSpaceFinder.findPositionForBox(truckBody, boxHeight, boxLength);
 
