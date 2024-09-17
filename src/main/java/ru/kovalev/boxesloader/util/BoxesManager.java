@@ -1,5 +1,6 @@
 package ru.kovalev.boxesloader.util;
 
+import ru.kovalev.boxesloader.exception.FileReadingException;
 import ru.kovalev.boxesloader.validator.DataValidator;
 
 import java.io.IOException;
@@ -10,10 +11,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public final class BoxesManager {
-    private static final Map<String, int[][]> SIZE_BOXES = Map.of(
+    private static final Map<String, int[][]> BOX_SIZES = Map.of(
             "1", new int[1][1],
             "2", new int[1][2],
             "3", new int[1][3],
@@ -39,44 +39,47 @@ public final class BoxesManager {
         }
 
         result.sort(Comparator.reverseOrder());
-
         return result;
     }
 
     private static List<String> readBoxes(Path path) {
-        try {
-            List<String> strings = Files.readAllLines(path);
-            boolean isValid = DataValidator.isValidData(strings);
-            if (isValid) {
-                List<String> result = new ArrayList<>();
-                int index = 0;
-                while (index < strings.size()) {
-                    StringBuilder box = new StringBuilder();
-                    String current = strings.get(index);
-                    if (!current.isEmpty()) {
-                        while (!current.isEmpty()) {
-                            box.append(current);
-                            index++;
-                            if (index < strings.size()) {
-                                current = strings.get(index);
-                            } else {
-                                break;
-                            }
-                        }
-                        result.add(box.toString());
-                        index++;
+        List<String> strings = readFile(path);
+        boolean isValid = DataValidator.isValidData(strings);
+        if (!isValid) {
+            return Collections.emptyList();
+        }
+
+        List<String> result = new ArrayList<>();
+        int startIndex = 0;
+        while (startIndex < strings.size()) {
+            StringBuilder box = new StringBuilder();
+            String current = strings.get(startIndex);
+            if (!current.isEmpty()) {
+                while (!current.isEmpty()) {
+                    box.append(current);
+                    startIndex++;
+                    if (startIndex < strings.size()) {
+                        current = strings.get(startIndex);
+                    } else {
+                        break;
                     }
                 }
-                return result;
-            } else {
-                return Collections.emptyList();
+                result.add(box.toString());
+                startIndex++;
             }
+        }
+        return result;
+    }
+
+    private static List<String> readFile(Path path) {
+        try {
+            return Files.readAllLines(path);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileReadingException("Произошла ошибка при чтении файла: " + path, e);
         }
     }
 
     public static int[][] getBoxDimensions(String boxWeight) {
-        return SIZE_BOXES.get(boxWeight);
+        return BOX_SIZES.get(boxWeight);
     }
 }

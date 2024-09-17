@@ -6,9 +6,8 @@ import ru.kovalev.boxesloader.exception.ValidationException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DataValidatorTest {
 
@@ -29,7 +28,8 @@ class DataValidatorTest {
                 "8888"
         );
 
-        assertDoesNotThrow(() -> DataValidator.isValidData(validData));
+        assertThatCode(() -> DataValidator.isValidData(validData))
+                .doesNotThrowAnyException();
     }
 
     @Test
@@ -41,8 +41,9 @@ class DataValidatorTest {
                 "999"
         );
 
-        ValidationException thrown = assertThrows(ValidationException.class, () -> DataValidator.isValidData(dataWithEmptyLineAtStart));
-        assertEquals("Файл не может начинаться с пустой строки.", thrown.getMessage());
+        assertThatThrownBy(() -> DataValidator.isValidData(dataWithEmptyLineAtStart))
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("Файл не может начинаться с пустой строки.");
     }
 
     @Test
@@ -56,8 +57,9 @@ class DataValidatorTest {
                 "999"
         );
 
-        ValidationException thrown = assertThrows(ValidationException.class, () -> DataValidator.isValidData(dataWithConsecutiveEmptyLines));
-        assertEquals("Найдено более одной пустой строки идущей подряд.", thrown.getMessage());
+        assertThatThrownBy(() -> DataValidator.isValidData(dataWithConsecutiveEmptyLines))
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("Найдено более одной пустой строки идущей подряд.");
     }
 
     @Test
@@ -68,15 +70,18 @@ class DataValidatorTest {
                 "999"
         );
 
-        ValidationException thrown = assertThrows(ValidationException.class, () -> DataValidator.isValidData(dataWithNonDigitString));
-        assertEquals("Найдена строка, содержащая не только цифры: abc", thrown.getMessage());
+        assertThatThrownBy(() -> DataValidator.isValidData(dataWithNonDigitString))
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("Найдена строка, содержащая не только цифры: abc");
     }
 
     @Test
     public void testEmptyData() {
         List<String> emptyData = List.of("");
 
-        ValidationException thrown = assertThrows(ValidationException.class, () -> DataValidator.isValidData(emptyData));
-        assertEquals("Файл не может начинаться с пустой строки.", thrown.getMessage());
+        assertThatThrownBy(() -> DataValidator.isValidData(emptyData))
+                .isInstanceOf(ValidationException.class)
+                .hasMessageContaining("Файл не может начинаться с пустой строки.");
+
     }
 }

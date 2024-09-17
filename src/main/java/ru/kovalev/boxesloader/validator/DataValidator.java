@@ -3,12 +3,10 @@ package ru.kovalev.boxesloader.validator;
 import ru.kovalev.boxesloader.exception.ValidationException;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class DataValidator {
-    private static final String DIGIT_REGEX = "\\d+";
-
-    private DataValidator() {
-    }
+    private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d+");
 
     public static boolean isValidData(List<String> strings) {
         boolean isPreviousEmpty = false;
@@ -26,7 +24,7 @@ public class DataValidator {
                 continue;
             }
 
-            if (!string.matches(DIGIT_REGEX)) {
+            if (!DIGIT_PATTERN.matcher(string).matches()) {
                 throw new ValidationException("Найдена строка, содержащая не только цифры: " + string);
             }
 
