@@ -10,6 +10,6 @@ class TruckTest {
         int bodySize = 6;
         Truck truck = new Truck(bodySize);
         String[][] body = truck.getBody();
-        assertThat(body.length).isEqualTo(bodySize);
+        assertThat(body[0]).hasSize(bodySize);
     }
 }

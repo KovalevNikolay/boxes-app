@@ -28,7 +28,7 @@ class DataValidatorTest {
                 "8888"
         );
 
-        assertThatCode(() -> DataValidator.isValidData(validData))
+        assertThatCode(() -> DataValidator.validate(validData))
                 .doesNotThrowAnyException();
     }
 
@@ -41,7 +41,7 @@ class DataValidatorTest {
                 "999"
         );
 
-        assertThatThrownBy(() -> DataValidator.isValidData(dataWithEmptyLineAtStart))
+        assertThatThrownBy(() -> DataValidator.validate(dataWithEmptyLineAtStart))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Файл не может начинаться с пустой строки.");
     }
@@ -57,7 +57,7 @@ class DataValidatorTest {
                 "999"
         );
 
-        assertThatThrownBy(() -> DataValidator.isValidData(dataWithConsecutiveEmptyLines))
+        assertThatThrownBy(() -> DataValidator.validate(dataWithConsecutiveEmptyLines))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Найдено более одной пустой строки идущей подряд.");
     }
@@ -70,7 +70,7 @@ class DataValidatorTest {
                 "999"
         );
 
-        assertThatThrownBy(() -> DataValidator.isValidData(dataWithNonDigitString))
+        assertThatThrownBy(() -> DataValidator.validate(dataWithNonDigitString))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Найдена строка, содержащая не только цифры: abc");
     }
@@ -79,7 +79,7 @@ class DataValidatorTest {
     public void testEmptyData() {
         List<String> emptyData = List.of("");
 
-        assertThatThrownBy(() -> DataValidator.isValidData(emptyData))
+        assertThatThrownBy(() -> DataValidator.validate(emptyData))
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining("Файл не может начинаться с пустой строки.");
 

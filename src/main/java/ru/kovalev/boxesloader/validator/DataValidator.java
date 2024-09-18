@@ -10,7 +10,7 @@ public class DataValidator {
 
     private DataValidator() {
     }
-    public static boolean isValidData(List<String> strings) {
+    public static void validate(List<String> strings) {
         boolean isPreviousEmpty = false;
         for (String string : strings) {
 
@@ -32,6 +32,5 @@ public class DataValidator {
 
             isPreviousEmpty = false;
         }
-        return true;
     }
 }

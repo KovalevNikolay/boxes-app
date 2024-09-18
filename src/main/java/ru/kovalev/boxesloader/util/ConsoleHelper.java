@@ -4,7 +4,7 @@ import ru.kovalev.boxesloader.model.Truck;
 
 import java.util.List;
 
-public class ConsoleHelper {
+public final class ConsoleHelper {
 
     private ConsoleHelper() {
     }
