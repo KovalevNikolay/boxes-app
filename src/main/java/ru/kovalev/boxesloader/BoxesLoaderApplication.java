@@ -12,7 +12,6 @@ import java.util.Scanner;
 
 public class BoxesLoaderApplication {
     public static void main(String[] args) {
-        Path path = Path.of("src", "main", "resources", "init_boxes.txt");
         BoxesLoaderService loaderService = new BoxesLoaderService(new TruckSpaceFinder());
         BoxesReaderService boxesReaderService = new BoxesReaderService();
 
@@ -20,7 +19,7 @@ public class BoxesLoaderApplication {
         System.out.print("Введите размеры кузова:");
         int truckBodySize = scanner.nextInt();
 
-        List<String> boxes = boxesReaderService.getBoxes(path);
+        List<String> boxes = boxesReaderService.getBoxes(Path.of(args[0]));
         List<Truck> trucks = loaderService.distributeBoxes(boxes, truckBodySize);
 
         ConsoleHelper.printTrucks(trucks);
