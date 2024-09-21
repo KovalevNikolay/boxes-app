@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class TruckSpaceFinder {
 
-    public int[] findPositionForBox(String[][] truckBody, int boxHeight, int boxLength) {
+    public int[] findPositionForBox(Integer[][] truckBody, int boxHeight, int boxLength) {
         for (int i = truckBody.length - 1; i >= boxHeight - 1; i--) {
             int[] position = findPositionInRow(truckBody, i, boxHeight, boxLength);
             if (position.length > 0) {
@@ -14,7 +14,7 @@ public class TruckSpaceFinder {
         return new int[0];
     }
 
-    private int[] findPositionInRow(String[][] truckBody, int row, int boxHeight, int boxLength) {
+    private int[] findPositionInRow(Integer[][] truckBody, int row, int boxHeight, int boxLength) {
         int left = Integer.MIN_VALUE;
         int right = 0;
 
@@ -32,7 +32,7 @@ public class TruckSpaceFinder {
         return new int[0];
     }
 
-    private int updateLeftBound(String[][] truckBody, int row, int right, int left) {
+    private int updateLeftBound(Integer[][] truckBody, int row, int right, int left) {
         if (Objects.isNull(truckBody[row][right])) {
             if (left == Integer.MIN_VALUE) {
                 return right;
@@ -43,11 +43,11 @@ public class TruckSpaceFinder {
         return left;
     }
 
-    private boolean isPositionSupported(String[][] truckBody, int boxLength, int row, int right) {
+    private boolean isPositionSupported(Integer[][] truckBody, int boxLength, int row, int right) {
         return (row == truckBody.length - 1) || hasEnoughSupport(truckBody[row + 1], boxLength, right - boxLength + 1, right);
     }
 
-    private boolean isBoxFit(String[][] truckBody, int row, int right, int boxHeight, int boxLength) {
+    private boolean isBoxFit(Integer[][] truckBody, int row, int right, int boxHeight, int boxLength) {
         int left = right - boxLength + 1;
 
         if (left < 0 || isNotEmptySpace(truckBody[row], left, right)) {
@@ -62,7 +62,7 @@ public class TruckSpaceFinder {
         return true;
     }
 
-    private boolean isNotEmptySpace(String[] row, int left, int right) {
+    private boolean isNotEmptySpace(Integer[] row, int left, int right) {
         for (int i = left; i <= right; i++) {
             if (!Objects.isNull(row[i])) {
                 return true;
@@ -71,7 +71,7 @@ public class TruckSpaceFinder {
         return false;
     }
 
-    private boolean hasEnoughSupport(String[] truckBody, int boxLength, int left, int right) {
+    private boolean hasEnoughSupport(Integer[] truckBody, int boxLength, int left, int right) {
         int halfBoxLength = (boxLength % 2 == 0) ? boxLength / 2 : boxLength / 2 + 1;
         int supportLength = 0;
         while (left <= right) {

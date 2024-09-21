@@ -7,9 +7,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TruckTest {
     @Test
     void bodyLengthEqualBodySize() {
-        int bodySize = 6;
-        Truck truck = new Truck(bodySize);
-        String[][] body = truck.getBody();
-        assertThat(body[0]).hasSize(bodySize);
+        int truckHeight = 6;
+        int truckLength = 8;
+        Truck truck = new Truck(truckHeight, truckLength);
+        Integer[][] body = truck.getBody();
+        assertThat(body.length).isEqualTo(truckHeight);
+        assertThat(body[0]).hasSize(truckLength);
     }
 }
