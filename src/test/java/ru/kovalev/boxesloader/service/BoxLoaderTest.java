@@ -32,39 +32,39 @@ class BoxLoaderTest {
 
     @Test
     void boxesAreLoadedIntoOneTruck() {
-        boxes = List.of(
-                new Box(new int[3][3]),
-                new Box(new int[2][3]),
-                new Box(new int[1][5]),
-                new Box(new int[1][1]),
-                new Box(new int[1][1]),
-                new Box(new int[1][3])
-        );
-        List<Truck> trucks = boxLoader.distributeBoxes(new ArrayList<>(boxes), TRUCK_HEIGHT, TRUCK_LENGTH);
+        boxes = new ArrayList<>();
+        boxes.add(new Box(new int[3][3]));
+        boxes.add(new Box(new int[2][3]));
+        boxes.add(new Box(new int[1][5]));
+        boxes.add(new Box(new int[1][1]));
+        boxes.add(new Box(new int[1][1]));
+        boxes.add(new Box(new int[1][3]));
+
+        List<Truck> trucks = boxLoader.distributeBoxes(boxes, TRUCK_HEIGHT, TRUCK_LENGTH);
         assertThat(trucks).hasSize(1);
     }
 
     @Test
     void twoTrucksIfBoxDoesNotFit() {
-        boxes = List.of(
-                new Box(new int[][]{{7,7,7}, {7,7,7,7}}),
-                new Box(new int[3][3]),
-                new Box(new int[2][4])
-        );
-        List<Truck> trucks = boxLoader.distributeBoxes(new ArrayList<>(boxes), TRUCK_HEIGHT, TRUCK_LENGTH);
+        boxes = new ArrayList<>();
+        boxes.add(new Box(new int[][]{{7,7,7}, {7,7,7,7}}));
+        boxes.add(new Box(new int[3][3]));
+        boxes.add(new Box(new int[2][4]));
+
+        List<Truck> trucks = boxLoader.distributeBoxes(boxes, TRUCK_HEIGHT, TRUCK_LENGTH);
         assertThat(trucks).hasSize(2);
     }
 
     @Test
     void whenFiveBoxesThenFiveTrucks() {
-        boxes = List.of(
-                new Box(new int[1][1]),
-                new Box(new int[1][2]),
-                new Box(new int[1][3]),
-                new Box(new int[3][3]),
-                new Box(new int[1][2])
-        );
-        List<Truck> trucks = boxLoader.uniformLoadingBoxes(new ArrayList<>(boxes), TRUCK_HEIGHT, TRUCK_LENGTH, 1);
+        boxes = new ArrayList<>();
+        boxes.add(new Box(new int[1][1]));
+        boxes.add(new Box(new int[1][2]));
+        boxes.add(new Box(new int[1][3]));
+        boxes.add(new Box(new int[3][3]));
+        boxes.add(new Box(new int[1][2]));
+
+        List<Truck> trucks = boxLoader.uniformLoadingBoxes(boxes, TRUCK_HEIGHT, TRUCK_LENGTH, 1);
         assertThat(trucks).hasSize(boxes.size());
     }
 
