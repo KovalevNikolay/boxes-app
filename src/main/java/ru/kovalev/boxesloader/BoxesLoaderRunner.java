@@ -32,7 +32,7 @@ public class BoxesLoaderRunner {
         BoxLoader loaderService = new BoxLoader(new TruckSpaceFinder());
         JsonReader<Box> boxReader = new BoxReader();
 
-        System.out.print("Введите размеры кузова грузовика. \nВведите высоту кузова:");
+        System.out.print("Введите размеры кузова грузовика. \nВведите высоту кузова: ");
         int height = scanner.nextInt();
         System.out.print("Введите длину кузова: ");
         int length = scanner.nextInt();
