@@ -10,6 +10,9 @@ import java.util.List;
 public class TruckGenerator {
 
     public List<Truck> generate(int countTrucks, int bodyHeight, int bodyLength) {
+        if (bodyHeight <= 0 || bodyLength <= 0) {
+            throw new IllegalArgumentException("Размеры кузова грузовика не могут быть меньше или равны нулю.");
+        }
         List<Truck> trucks = new ArrayList<>();
 
         for (int i = 0; i < countTrucks; i++) {

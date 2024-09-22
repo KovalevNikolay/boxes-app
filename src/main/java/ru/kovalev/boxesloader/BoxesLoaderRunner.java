@@ -11,7 +11,6 @@ import ru.kovalev.boxesloader.service.TruckReader;
 import ru.kovalev.boxesloader.service.TruckSpaceFinder;
 import ru.kovalev.boxesloader.util.ConsoleHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
