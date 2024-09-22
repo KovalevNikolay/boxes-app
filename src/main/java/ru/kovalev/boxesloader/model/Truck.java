@@ -7,15 +7,19 @@ import java.util.Objects;
 
 public class Truck {
     private final Integer[][] body;
+    private int loadCapacity;
 
     public Truck(int height, int length) {
         body = new Integer[height][length];
+        loadCapacity = 0;
     }
 
     @JsonCreator
     public Truck(@JsonProperty("body") Integer[][] body) {
         this.body = body;
+        loadCapacity = 0;
     }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -35,5 +39,13 @@ public class Truck {
 
     public Integer[][] getBody() {
         return this.body;
+    }
+
+    public int getLoadCapacity() {
+        return loadCapacity;
+    }
+
+    public void setLoadCapacity(int loadCapacity) {
+        this.loadCapacity = loadCapacity;
     }
 }

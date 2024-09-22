@@ -1,7 +1,9 @@
 package ru.kovalev.boxesloader.service;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.kovalev.boxesloader.model.Truck;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -108,5 +110,16 @@ public class TruckSpaceFinder {
         log.debug("Проверка достаточной поддержки: необходимо {} элементов, найдено {}. Результат = {}"
                 , halfBoxLength, supportLength, hasEnoughSupport);
         return hasEnoughSupport;
+    }
+
+    public Truck findTruckWithMinLoadCapacity(List<Truck> trucks) {
+        Truck truckWithMinLoadCapacity = trucks.get(0);
+
+        for (Truck truck : trucks) {
+            if (truck.getLoadCapacity() < truckWithMinLoadCapacity.getLoadCapacity()) {
+                truckWithMinLoadCapacity = truck;
+            }
+        }
+        return truckWithMinLoadCapacity;
     }
 }

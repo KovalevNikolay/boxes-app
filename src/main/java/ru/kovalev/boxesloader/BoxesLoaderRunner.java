@@ -2,9 +2,16 @@ package ru.kovalev.boxesloader;
 
 import ru.kovalev.boxesloader.model.Box;
 import ru.kovalev.boxesloader.model.Truck;
-import ru.kovalev.boxesloader.service.*;
+import ru.kovalev.boxesloader.service.BoxLoader;
+import ru.kovalev.boxesloader.service.BoxReader;
+import ru.kovalev.boxesloader.service.JsonReader;
+import ru.kovalev.boxesloader.service.TruckGenerator;
+import ru.kovalev.boxesloader.service.TruckLoadAnalyzer;
+import ru.kovalev.boxesloader.service.TruckReader;
+import ru.kovalev.boxesloader.service.TruckSpaceFinder;
 import ru.kovalev.boxesloader.util.ConsoleHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -30,12 +37,17 @@ public class BoxesLoaderRunner {
 
     private static void loadBoxes(Scanner scanner) {
         BoxLoader loaderService = new BoxLoader(new TruckSpaceFinder());
+        TruckGenerator truckGenerator = new TruckGenerator();
         JsonReader<Box> boxReader = new BoxReader();
 
         System.out.print("Введите размеры кузова грузовика. \nВведите высоту кузова: ");
         int height = scanner.nextInt();
         System.out.print("Введите длину кузова: ");
         int length = scanner.nextInt();
+        System.out.print("Введите количество грузовиков: ");
+        int countTrucks = scanner.nextInt();
+
+        List<Truck> trucks = truckGenerator.generate(countTrucks, height, length);
 
         scanner.nextLine();
 
@@ -51,22 +63,13 @@ public class BoxesLoaderRunner {
                 """);
         int option = scanner.nextInt();
 
-        List<Truck> trucks = switch (option) {
-            case 1 -> uniformLoading(scanner, loaderService, boxes, height, length);
-            case 2 -> loaderService.distributeBoxes(boxes, height, length);
+        List<Truck> resultTrucks = switch (option) {
+            case 1 -> loaderService.uniformLoading(boxes, trucks);
+            case 2 -> loaderService.qualityLoading(boxes, trucks);
             default -> throw new IllegalArgumentException("Некорректный ввод: " + option);
         };
 
-        ConsoleHelper.printTrucks(trucks);
-    }
-
-    private static List<Truck> uniformLoading(Scanner scanner, BoxLoader loaderService, List<Box> boxes,
-                                              int height,
-                                              int length) {
-
-        System.out.print("Введите количество посылок в каждом грузовике: ");
-        int countBoxesInTruck = scanner.nextInt();
-        return loaderService.uniformLoadingBoxes(boxes, height, length, countBoxesInTruck);
+        ConsoleHelper.printTrucks(resultTrucks);
     }
 
     private static void calculateQuantityBoxesInTruck(Scanner scanner) {

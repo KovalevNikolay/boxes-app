@@ -1,105 +1,96 @@
 package ru.kovalev.boxesloader.service;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.kovalev.boxesloader.exception.BoxLoaderException;
 import ru.kovalev.boxesloader.exception.OversizedBoxException;
 import ru.kovalev.boxesloader.model.Box;
 import ru.kovalev.boxesloader.model.Truck;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Slf4j
 public class BoxLoader {
-
-    private static final int ZERO_BOXES_IN_THE_TRUCK = 0;
-
     private final TruckSpaceFinder truckSpaceFinder;
 
     public BoxLoader(TruckSpaceFinder truckSpaceFinder) {
         this.truckSpaceFinder = truckSpaceFinder;
     }
 
-    public List<Truck> distributeBoxes(List<Box> boxes, int truckHeight, int truckLength) {
-        log.info("Начало распределения посылок. Количество посылок: {}, Высота грузовика: {}, Длина грузовика: {}",
-                boxes.size(), truckHeight, truckLength);
+    public List<Truck> qualityLoading(List<Box> boxes, List<Truck> trucks) {
+        return loadBoxes(boxes, trucks, this::loadQuality);
+    }
+
+    public List<Truck> uniformLoading(List<Box> boxes, List<Truck> trucks) {
+        return loadBoxes(boxes, trucks, this::loadUniform);
+    }
+
+    public List<Truck> loadBoxes(List<Box> boxes, List<Truck> trucks, LoaderStrategy loaderStrategy) {
+        log.info("Начало загрузки посылок. Количество посылок: {} шт., Количество грузовиков: {} шт.",
+                boxes.size(), trucks.size());
 
         if (boxes == null || boxes.isEmpty()) {
             log.warn("Список посылок пуст.");
             return Collections.emptyList();
         }
 
-        boxes.sort(Collections.reverseOrder());
+        if (trucks == null || trucks.isEmpty()) {
+            log.warn("Список грузовиков пуст.");
+            return Collections.emptyList();
+        }
+
+        boxes.sort(Comparator.reverseOrder());
         log.debug("Посылки отсортированы по убыванию размера.");
 
-        List<Truck> trucks = new ArrayList<>();
-        trucks.add(new Truck(truckHeight, truckLength));
-        log.info("Создан первый грузовик.");
+        int countLoadedBoxes = loaderStrategy.load(boxes, trucks);
+
+        if (countLoadedBoxes != boxes.size()) {
+            throw new BoxLoaderException("Ошибка распределения посылок. Количество посылок, которые не поместились: "
+                                         + (boxes.size() - countLoadedBoxes));
+        }
+
+        log.info("Загрузка успешно завершена.");
+        return trucks;
+    }
+
+    public int loadQuality(List<Box> boxes, List<Truck> trucks) {
+        log.info("Использование алгоритма качественной погрузки посылок.");
+
+        int countLoadedBoxes = 0;
 
         for (Box box : boxes) {
             log.info("Попытка загрузки посылки с размерами: Высота = {}, Длина = {}", box.getHeight(), box.getMaxLength());
-            boolean isLoad = false;
+            boolean isLoad;
             for (Truck truck : trucks) {
                 isLoad = loadToTruck(box, truck);
                 if (isLoad) {
                     log.info("Посылка успешно загружена в грузовик.");
+                    countLoadedBoxes++;
                     break;
                 }
             }
-
-            if (!isLoad) {
-                log.info("Посылка не может быть загружена в текущие грузовики. Создание нового грузовика.");
-                Truck truck = new Truck(truckHeight, truckLength);
-                loadToTruck(box, truck);
-                trucks.add(truck);
-                log.info("Посылка загружена в новый грузовик.");
-            }
-
         }
-        log.info("Распределение посылок завершено. Использовано грузовиков: {}", trucks.size());
-        return trucks;
+
+        return countLoadedBoxes;
     }
 
-    public List<Truck> uniformLoadingBoxes(List<Box> boxes, int truckHeight, int truckLength, int countBoxesInTruck) {
-        log.info("Начало равномерной загрузки посылок. Количество посылок: {}, Высота грузовика: {}, Длина грузовика: {}, Максимум посылок в грузовике: {}",
-                boxes.size(), truckHeight, truckLength, countBoxesInTruck);
-
-        if (boxes == null || boxes.isEmpty()) {
-            log.warn("Список посылок пуст.");
-            return Collections.emptyList();
-        }
-
-        Map<Truck, Integer> trucks = new HashMap<>();
-        trucks.put(new Truck(truckHeight, truckLength), ZERO_BOXES_IN_THE_TRUCK);
-        log.info("Создан первый грузовик для равномерной загрузки.");
+    private int loadUniform(List<Box> boxes, List<Truck> trucks) {
+        log.info("Использование алгоритма равномерной погрузки посылок.");
+        int countLoadedBoxes = 0;
 
         for (Box box : boxes) {
-            log.info("Попытка загрузки посылки с размерами: Высота = {}, Длина = {}", box.getHeight(), box.getMaxLength());
-            boolean isLoad = false;
-
-            for (Map.Entry<Truck, Integer> truck : trucks.entrySet()) {
-                Integer countLoadingBoxes = truck.getValue();
-                if (countLoadingBoxes < countBoxesInTruck) {
-                    Truck currentTruck = truck.getKey();
-                    isLoad = loadToTruck(box, currentTruck);
-                    if (isLoad) {
-                        log.info("Посылка успешно загружена в грузовик.");
-                        trucks.put(currentTruck, countLoadingBoxes + 1);
-                        break;
-                    }
-                }
-            }
-
-            if (!isLoad) {
-                log.info("Посылка не может быть загружена в текущие грузовики. Создание нового грузовика.");
-                Truck truck = new Truck(truckHeight, truckLength);
-                loadToTruck(box, truck);
-                trucks.put(truck, ZERO_BOXES_IN_THE_TRUCK + 1);
-                log.info("Посылка загружена в новый грузовик.");
+            Truck truck = truckSpaceFinder.findTruckWithMinLoadCapacity(trucks);
+            int currentLoadCapacity = truck.getLoadCapacity();
+            if (loadToTruck(box, truck)) {
+                truck.setLoadCapacity(currentLoadCapacity + box.getMarker());
+                log.info("Посылка успешно загружена в грузовик.");
+                countLoadedBoxes++;
             }
         }
-
-        log.info("Равномерная загрузка посылок завершена. Использовано грузовиков: {}", trucks.size());
-        return trucks.keySet().stream().toList();
+        return countLoadedBoxes;
     }
+
 
     private boolean loadToTruck(Box box, Truck truck) {
         Integer[][] truckBody = truck.getBody();
