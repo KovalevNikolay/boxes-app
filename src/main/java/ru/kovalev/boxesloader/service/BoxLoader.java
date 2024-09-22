@@ -26,7 +26,7 @@ public class BoxLoader {
         return loadBoxes(boxes, trucks, this::loadUniform);
     }
 
-    public List<Truck> loadBoxes(List<Box> boxes, List<Truck> trucks, LoaderStrategy loaderStrategy) {
+    private List<Truck> loadBoxes(List<Box> boxes, List<Truck> trucks, LoaderStrategy loaderStrategy) {
         log.info("Начало загрузки посылок. Количество посылок: {} шт., Количество грузовиков: {} шт.",
                 boxes.size(), trucks.size());
 
@@ -54,7 +54,7 @@ public class BoxLoader {
         return trucks;
     }
 
-    public int loadQuality(List<Box> boxes, List<Truck> trucks) {
+    private int loadQuality(List<Box> boxes, List<Truck> trucks) {
         log.info("Использование алгоритма качественной погрузки посылок.");
 
         int countLoadedBoxes = 0;

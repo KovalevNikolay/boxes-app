@@ -1,3 +1,4 @@
 package ru.kovalev.boxesloader.service;
-class BoxLoaderTest {
+
+class TruckLoadAnalyzerTest {
 }
