@@ -4,7 +4,7 @@ import ru.kovalev.boxesloader.model.Box;
 import ru.kovalev.boxesloader.model.Truck;
 import ru.kovalev.boxesloader.service.BoxLoader;
 import ru.kovalev.boxesloader.service.BoxReader;
-import ru.kovalev.boxesloader.service.JsonReader;
+import ru.kovalev.boxesloader.interfaces.JsonReader;
 import ru.kovalev.boxesloader.service.TruckGenerator;
 import ru.kovalev.boxesloader.service.TruckLoadAnalyzer;
 import ru.kovalev.boxesloader.service.TruckReader;
@@ -81,7 +81,7 @@ public class BoxesLoaderRunner {
         List<Truck> trucks = truckReader.read(path);
 
         for (Truck truck : trucks) {
-            Map<Integer, Integer> countBoxes = truckLoadAnalyzer.countBoxesInTruck(truck);
+            Map<Integer, Integer> countBoxes = truckLoadAnalyzer.getCountBoxesInTruck(truck);
             ConsoleHelper.printBoxesInTruck(truck, countBoxes);
         }
     }

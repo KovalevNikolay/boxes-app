@@ -1,4 +1,4 @@
-package ru.kovalev.boxesloader.service;
+package ru.kovalev.boxesloader.interfaces;
 
 import ru.kovalev.boxesloader.model.Box;
 import ru.kovalev.boxesloader.model.Truck;

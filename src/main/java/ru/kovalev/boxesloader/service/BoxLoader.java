@@ -3,6 +3,7 @@ package ru.kovalev.boxesloader.service;
 import lombok.extern.slf4j.Slf4j;
 import ru.kovalev.boxesloader.exception.BoxLoaderException;
 import ru.kovalev.boxesloader.exception.OversizedBoxException;
+import ru.kovalev.boxesloader.interfaces.LoaderStrategy;
 import ru.kovalev.boxesloader.model.Box;
 import ru.kovalev.boxesloader.model.Truck;
 

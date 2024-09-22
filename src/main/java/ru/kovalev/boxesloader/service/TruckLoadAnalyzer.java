@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Slf4j
 public class TruckLoadAnalyzer {
-    public Map<Integer, Integer> countBoxesInTruck(Truck truck) {
+    public Map<Integer, Integer> getCountBoxesInTruck(Truck truck) {
         log.info("Начат анализ загруженности грузовика с параметрами: Высота = {}, Длина = {}",
                 truck.getBody().length, truck.getBody()[0].length);
 

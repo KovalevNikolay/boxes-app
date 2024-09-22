@@ -1,4 +1,4 @@
-package ru.kovalev.boxesloader.service;
+package ru.kovalev.boxesloader.interfaces;
 
 import java.util.List;
 

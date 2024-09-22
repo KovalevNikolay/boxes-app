@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import ru.kovalev.boxesloader.exception.FileReadingException;
+import ru.kovalev.boxesloader.interfaces.JsonReader;
 import ru.kovalev.boxesloader.model.Truck;
 
 import java.io.File;

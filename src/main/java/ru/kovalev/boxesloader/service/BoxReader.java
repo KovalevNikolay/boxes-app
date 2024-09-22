@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import ru.kovalev.boxesloader.exception.FileReadingException;
+import ru.kovalev.boxesloader.interfaces.JsonReader;
 import ru.kovalev.boxesloader.model.Box;
 
 import java.io.File;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-public class BoxReader implements JsonReader<Box>{
+public class BoxReader implements JsonReader<Box> {
 
     @Override
     public List<Box> read(String path) {
