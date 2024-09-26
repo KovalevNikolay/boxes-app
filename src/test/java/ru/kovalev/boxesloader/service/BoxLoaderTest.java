@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BoxLoaderTest {
 
-    private final BoxLoader boxLoader = new BoxLoader(new TruckSpaceFinder());
+    private final BoxLoader boxLoader = new BoxLoader(new BoxPlacementFinder());
 
     @Test
     void whenBoxSizeMoreThanTruckSize() {

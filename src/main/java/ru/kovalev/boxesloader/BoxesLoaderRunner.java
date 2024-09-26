@@ -8,7 +8,7 @@ import ru.kovalev.boxesloader.interfaces.JsonReader;
 import ru.kovalev.boxesloader.service.TruckGenerator;
 import ru.kovalev.boxesloader.service.TruckLoadAnalyzer;
 import ru.kovalev.boxesloader.service.TruckReader;
-import ru.kovalev.boxesloader.service.TruckSpaceFinder;
+import ru.kovalev.boxesloader.service.BoxPlacementFinder;
 import ru.kovalev.boxesloader.util.ConsoleHelper;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class BoxesLoaderRunner {
     }
 
     private static void loadBoxes(Scanner scanner) {
-        BoxLoader loaderService = new BoxLoader(new TruckSpaceFinder());
+        BoxLoader loaderService = new BoxLoader(new BoxPlacementFinder());
         TruckGenerator truckGenerator = new TruckGenerator();
         JsonReader<Box> boxReader = new BoxReader();
 

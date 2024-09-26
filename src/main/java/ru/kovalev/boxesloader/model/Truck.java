@@ -2,11 +2,15 @@ package ru.kovalev.boxesloader.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Getter
 public class Truck {
     private final Integer[][] body;
+    @Setter
     private int loadCapacity;
 
     public Truck(int height, int length) {
@@ -35,17 +39,5 @@ public class Truck {
         stringBuilder.append("+".repeat(Math.max(0, body.length + 2)));
 
         return stringBuilder.toString();
-    }
-
-    public Integer[][] getBody() {
-        return this.body;
-    }
-
-    public int getLoadCapacity() {
-        return loadCapacity;
-    }
-
-    public void setLoadCapacity(int loadCapacity) {
-        this.loadCapacity = loadCapacity;
     }
 }

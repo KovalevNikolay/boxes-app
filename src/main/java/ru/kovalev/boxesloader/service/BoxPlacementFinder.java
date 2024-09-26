@@ -8,7 +8,7 @@ import java.util.Objects;
 
 
 @Slf4j
-public class TruckSpaceFinder {
+public class BoxPlacementFinder {
 
     public int[] findPositionForBox(Integer[][] truckBody, int boxHeight, int boxLength) {
         log.info("Поиск позиции для посылки: Высота = {}, Длина = {}", boxHeight, boxLength);

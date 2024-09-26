@@ -13,10 +13,10 @@ import java.util.List;
 
 @Slf4j
 public class BoxLoader {
-    private final TruckSpaceFinder truckSpaceFinder;
+    private final BoxPlacementFinder placementFinder;
 
-    public BoxLoader(TruckSpaceFinder truckSpaceFinder) {
-        this.truckSpaceFinder = truckSpaceFinder;
+    public BoxLoader(BoxPlacementFinder placementFinder) {
+        this.placementFinder = placementFinder;
     }
 
     public List<Truck> qualityLoading(List<Box> boxes, List<Truck> trucks) {
@@ -81,7 +81,7 @@ public class BoxLoader {
         int countLoadedBoxes = 0;
 
         for (Box box : boxes) {
-            Truck truck = truckSpaceFinder.findTruckWithMinLoadCapacity(trucks);
+            Truck truck = placementFinder.findTruckWithMinLoadCapacity(trucks);
             int currentLoadCapacity = truck.getLoadCapacity();
             if (loadToTruck(box, truck)) {
                 truck.setLoadCapacity(currentLoadCapacity + box.getMarker());
@@ -95,7 +95,6 @@ public class BoxLoader {
 
     private boolean loadToTruck(Box box, Truck truck) {
         Integer[][] truckBody = truck.getBody();
-        int[][] boxSizes = box.sizes();
         int boxHeight = box.getHeight();
         int boxLength = box.getMaxLength();
 
@@ -108,7 +107,7 @@ public class BoxLoader {
             throw new OversizedBoxException("Габариты посылки не могут превышать размеры кузова.");
         }
 
-        int[] position = truckSpaceFinder.findPositionForBox(truckBody, boxHeight, boxLength);
+        int[] position = placementFinder.findPositionForBox(truckBody, boxHeight, boxLength);
 
         if (position.length == 0) {
             log.warn("Не удалось найти место для посылки в грузовике.");
@@ -116,7 +115,7 @@ public class BoxLoader {
         }
 
         log.debug("Выполнятся погрузка посылки: H={}, L={}", boxHeight, boxLength);
-        performLoading(box.getMarker(), truckBody, boxSizes, position[0], position[1]);
+        performLoading(box.getMarker(), truckBody, box.sizes(), position[0], position[1]);
         return true;
     }
 
