@@ -1,0 +1,22 @@
+[
+  {
+    "body": [
+      [null, null, null, null, null, null],
+      [null, null, null, null, null, null],
+      [5, 5, 5, 5, 5, null],
+      [9, 9, 9, 1, null, null],
+      [9, 9, 9, 2, 2, 1],
+      [9, 9, 9, 3, 3, 3]
+    ]
+  },
+  {
+    "body": [
+      [null, null, null, null, null, null],
+      [9, 9, 9, null, null, null],
+      [9, 9, 9, 9, 9, 9],
+      [9, 9, 9, 9, 9, 9],
+      [7, 7, 7, 9, 9, 9],
+      [7, 7, 7, 7, 1, 1]
+    ]
+  }
+]
