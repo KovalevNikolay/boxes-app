@@ -13,6 +13,14 @@ import java.util.List;
 
 @Slf4j
 public class TruckReader implements JsonReader<Truck> {
+
+    /**
+     * Читает список объектов типа {@link Truck} грузовик из JSON-файла
+     *
+     * @param path путь к JSON-файлу, из которого необходимо считать данные
+     * @return список грузовиков считанных из файла
+     * @throws FileReadingException если произошла ошибка при чтении файла
+     */
     @Override
     public List<Truck> read(String path) {
         ObjectMapper objectMapper = new ObjectMapper();

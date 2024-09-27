@@ -9,6 +9,15 @@ import java.util.List;
 @Slf4j
 public class TruckGenerator {
 
+    /**
+     * Создает список грузовиков с заданными размерами кузова
+     *
+     * @param countTrucks количество грузовиков, которые нужно создать
+     * @param bodyHeight высота кузова грузовика
+     * @param bodyLength длина кузова грузовика
+     * @return список созданных грузовиков
+     * @throws IllegalArgumentException если высота или длина кузова меньше или равна нулю
+     */
     public List<Truck> generate(int countTrucks, int bodyHeight, int bodyLength) {
         if (bodyHeight <= 0 || bodyLength <= 0) {
             throw new IllegalArgumentException("Размеры кузова грузовика не могут быть меньше или равны нулю.");

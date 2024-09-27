@@ -18,6 +18,15 @@ public class LoadBoxesAction implements Action {
     private final Scanner scanner;
     private final ConsoleHelper consoleHelper;
 
+    /**
+     * Конструктор для инициализации действия загрузки посылок.
+     *
+     * @param loaderService сервис погрузки посылок.
+     * @param truckGenerator генератор грузовиков.
+     * @param boxReader сервис чтения посылок из JSON
+     * @param scanner объект для считывания пользовательского ввода.
+     * @param consoleHelper сервис для вывода информации в консоль.
+     */
     public LoadBoxesAction(BoxLoader loaderService, TruckGenerator truckGenerator, JsonReader<Box> boxReader,
                            Scanner scanner, ConsoleHelper consoleHelper) {
         this.loaderService = loaderService;
@@ -27,6 +36,13 @@ public class LoadBoxesAction implements Action {
         this.consoleHelper = consoleHelper;
     }
 
+    /**
+     * Выполняет действие по загрузке коробок в грузовики.
+     * Запрашивает у пользователя размеры кузова, количество грузовиков и путь к JSON файлу с коробками,
+     * а также алгоритм погрузки. Загружает коробки в грузовики и выводит результат.
+     *
+     * @throws IllegalArgumentException если введены некорректные данные, например, неверный номер алгоритма.
+     */
     @Override
     public void execute() {
         System.out.print("Введите размеры кузова грузовика. \nВведите высоту кузова: ");

@@ -15,14 +15,35 @@ import java.util.List;
 public class BoxLoader {
     private final BoxPlacementFinder placementFinder;
 
+    /**
+     * Конструктор
+     *
+     * @param placementFinder объект, используемый для нахождения места для посылки в грузовике
+     */
     public BoxLoader(BoxPlacementFinder placementFinder) {
         this.placementFinder = placementFinder;
     }
 
+    /**
+     * Выполняет погрузку посылок с использованием алгоритма качественной (плотной) погрузки
+     *
+     * @param boxes  список посылок для загрузки
+     * @param trucks список грузовиков для распределения посылок
+     * @return обновленный список грузовиков после загрузки
+     * @throws BoxLoaderException если не все посылки поместились в кузов грузовика
+     */
     public List<Truck> qualityLoading(List<Box> boxes, List<Truck> trucks) {
         return loadBoxes(boxes, trucks, this::loadQuality);
     }
 
+    /**
+     * Выполняет погрузку посылок с использованием алгоритма равномерной погрузки
+     *
+     * @param boxes  список посылок для загрузки
+     * @param trucks список грузовиков для распределения посылок
+     * @return обновленный список грузовиков после загрузки
+     * @throws BoxLoaderException если не все посылки поместились в кузов грузовика
+     */
     public List<Truck> uniformLoading(List<Box> boxes, List<Truck> trucks) {
         return loadBoxes(boxes, trucks, this::loadUniform);
     }
@@ -48,7 +69,7 @@ public class BoxLoader {
 
         if (countLoadedBoxes != boxes.size()) {
             throw new BoxLoaderException("Ошибка распределения посылок. Количество посылок, которые не поместились: "
-                                         + (boxes.size() - countLoadedBoxes));
+                    + (boxes.size() - countLoadedBoxes));
         }
 
         log.info("Загрузка успешно завершена.");

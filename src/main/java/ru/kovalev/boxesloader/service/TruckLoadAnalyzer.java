@@ -8,6 +8,13 @@ import java.util.Map;
 
 @Slf4j
 public class TruckLoadAnalyzer {
+
+    /**
+     * Анализирует загруженность грузовика и возвращает посылки, находящиеся в кузове
+     *
+     * @param truck грузовик, загруженность которого необходимо проанализировать
+     * @return map, где ключ - тип посылки, значение - количество посылок данного типа
+     */
     public Map<Integer, Integer> getCountBoxesInTruck(Truck truck) {
         log.info("Начат анализ загруженности грузовика с параметрами: Высота = {}, Длина = {}",
                 truck.getBody().length, truck.getBody()[0].length);

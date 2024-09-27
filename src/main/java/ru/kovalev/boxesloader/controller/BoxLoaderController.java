@@ -14,11 +14,24 @@ public class BoxLoaderController {
         this.actions = new HashMap<>();
     }
 
+    /**
+     * Добавляет новое действие для указанной опции.
+     *
+     * @param option номер опции, к которой будет привязано действие.
+     * @param action действие, которое будет выполнено при выборе этой опции.
+     */
     public void addAction(int option, Action action) {
         actions.put(option, action);
         log.info("Добавлено действие для опции: {}", option);
     }
 
+    /**
+     * Выполняет действие, связанное с указанной опцией.
+     * Если опция не найдена, генерируется исключение.
+     *
+     * @param option номер опции, для которой требуется выполнить действие.
+     * @throws IllegalArgumentException если выбрана несуществущая опция.
+     */
     public void executeAction(int option) {
         log.info("Попытка выполнить действие для опции: {}", option);
         Action action = actions.getOrDefault(option, () -> {
