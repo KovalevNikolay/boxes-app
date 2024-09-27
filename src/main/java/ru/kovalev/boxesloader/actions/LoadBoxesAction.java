@@ -63,7 +63,7 @@ public class LoadBoxesAction implements Action {
         System.out.print("""
                 Выберите алгоритм погрузки:
                 1. Равномерная погрузка
-                2. Качественная погрузка (плотная)
+                2. Качественная погрузка
                 (Введите цифру выбранного варианта)
                 """);
         int option = scanner.nextInt();
