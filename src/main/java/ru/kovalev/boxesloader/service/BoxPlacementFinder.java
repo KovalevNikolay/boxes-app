@@ -6,9 +6,19 @@ import ru.kovalev.boxesloader.model.Truck;
 import java.util.List;
 import java.util.Objects;
 
-
 @Slf4j
 public class BoxPlacementFinder {
+
+    /**
+     * Находит подходящую позицию для посылки в кузове грузовика
+     * Позиция считается подходящей, если посылка помещается по размерам, а имеет опору необходимой площади
+     *
+     * @param truckBody матрица - кузов грузовика
+     * @param boxHeight высота посылки
+     * @param boxLength длина посылки
+     * @return массив с координатами (формат [вертикаль; горизонталь] позиций для размещения посылки
+     * Если подходящего места нет, возвращается пустой массив
+     */
 
     public int[] findPositionForBox(Integer[][] truckBody, int boxHeight, int boxLength) {
         log.info("Поиск позиции для посылки: Высота = {}, Длина = {}", boxHeight, boxLength);
@@ -112,6 +122,12 @@ public class BoxPlacementFinder {
         return hasEnoughSupport;
     }
 
+    /**
+     * Осуществляет поиск наименее загруженного грузовика
+     *
+     * @param trucks список грузовиков
+     * @return наименее загруженный грузовик
+     */
     public Truck findTruckWithMinLoadCapacity(List<Truck> trucks) {
         Truck truckWithMinLoadCapacity = trucks.get(0);
 

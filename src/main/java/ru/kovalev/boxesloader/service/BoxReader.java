@@ -14,6 +14,13 @@ import java.util.List;
 @Slf4j
 public class BoxReader implements JsonReader<Box> {
 
+    /**
+     * Читает список объектов типа {@link Box} из JSON-файла по указанному пути.
+     *
+     * @param path путь к JSON-файлу
+     * @return список объектов типа {@link Box}, считанных из файла
+     * @throws FileReadingException если возникает ошибка при чтении файла
+     */
     @Override
     public List<Box> read(String path) {
         ObjectMapper objectMapper = new ObjectMapper();

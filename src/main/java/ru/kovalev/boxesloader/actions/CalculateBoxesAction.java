@@ -16,6 +16,14 @@ public class CalculateBoxesAction implements Action {
     private final Scanner scanner;
     private final ConsoleHelper consoleHelper;
 
+    /**
+     * Конструктор для инициализации действия анализа содержимого грузовиков.
+     *
+     * @param truckReader сервис для чтения грузовиков из JSON.
+     * @param truckLoadAnalyzer анализатор загрузки грузовиков.
+     * @param scanner объект для считывания пользовательского ввода.
+     * @param consoleHelper сервис для вывода информации в консоль.
+     */
     public CalculateBoxesAction(JsonReader<Truck> truckReader, TruckLoadAnalyzer truckLoadAnalyzer, Scanner scanner,
                                 ConsoleHelper consoleHelper) {
         this.truckReader = truckReader;
@@ -24,6 +32,11 @@ public class CalculateBoxesAction implements Action {
         this.consoleHelper = consoleHelper;
     }
 
+    /**
+     * Выполняет анализ содержимого грузовиков.
+     * Запрашивает у пользователя путь к JSON файлу с грузовиками,
+     * загружает данные и выводит количество посылок в каждом грузовике.
+     */
     @Override
     public void execute() {
         scanner.nextLine();

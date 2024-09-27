@@ -7,6 +7,11 @@ import java.util.Map;
 
 public class ConsoleHelper {
 
+    /**
+     * Выводит на консоль список грузовиков
+     *
+     * @param trucks список грузовиков для вывода на консоль
+     */
     public void printTrucks(List<Truck> trucks) {
         for (Truck truck : trucks) {
             System.out.println(truck);
@@ -14,6 +19,12 @@ public class ConsoleHelper {
         }
     }
 
+    /**
+     * Выводит в консоль информацию о грузовике и количестве посылок в нем
+     *
+     * @param truck грузовик для которого выводится информацию
+     * @param boxesInTruck - map, где ключ - тип посылки, значение - количество посылок данного типа
+     */
     public void printBoxesInTruck(Truck truck, Map<Integer, Integer> boxesInTruck) {
         System.out.println("Грузовик: ");
         System.out.println(truck);
