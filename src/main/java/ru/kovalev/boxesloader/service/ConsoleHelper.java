@@ -22,7 +22,7 @@ public class ConsoleHelper {
     /**
      * Выводит в консоль информацию о грузовике и количестве посылок в нем
      *
-     * @param truck грузовик для которого выводится информацию
+     * @param truck        грузовик для которого выводится информацию
      * @param boxesInTruck - map, где ключ - тип посылки, значение - количество посылок данного типа
      */
     public void printBoxesInTruck(Truck truck, Map<Integer, Integer> boxesInTruck) {

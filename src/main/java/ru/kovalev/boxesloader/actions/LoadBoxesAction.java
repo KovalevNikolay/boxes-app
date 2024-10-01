@@ -5,8 +5,8 @@ import ru.kovalev.boxesloader.interfaces.JsonReader;
 import ru.kovalev.boxesloader.model.Box;
 import ru.kovalev.boxesloader.model.Truck;
 import ru.kovalev.boxesloader.service.BoxLoader;
-import ru.kovalev.boxesloader.service.TruckGenerator;
 import ru.kovalev.boxesloader.service.ConsoleHelper;
+import ru.kovalev.boxesloader.service.TruckGenerator;
 
 import java.util.List;
 import java.util.Scanner;
@@ -21,11 +21,11 @@ public class LoadBoxesAction implements Action {
     /**
      * Конструктор для инициализации действия загрузки посылок.
      *
-     * @param loaderService сервис погрузки посылок.
+     * @param loaderService  сервис погрузки посылок.
      * @param truckGenerator генератор грузовиков.
-     * @param boxReader сервис чтения посылок из JSON
-     * @param scanner объект для считывания пользовательского ввода.
-     * @param consoleHelper сервис для вывода информации в консоль.
+     * @param boxReader      сервис чтения посылок из JSON
+     * @param scanner        объект для считывания пользовательского ввода.
+     * @param consoleHelper  сервис для вывода информации в консоль.
      */
     public LoadBoxesAction(BoxLoader loaderService, TruckGenerator truckGenerator, JsonReader<Box> boxReader,
                            Scanner scanner, ConsoleHelper consoleHelper) {

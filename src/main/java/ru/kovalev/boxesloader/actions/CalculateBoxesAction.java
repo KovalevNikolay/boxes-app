@@ -3,8 +3,8 @@ package ru.kovalev.boxesloader.actions;
 import ru.kovalev.boxesloader.interfaces.Action;
 import ru.kovalev.boxesloader.interfaces.JsonReader;
 import ru.kovalev.boxesloader.model.Truck;
-import ru.kovalev.boxesloader.service.TruckLoadAnalyzer;
 import ru.kovalev.boxesloader.service.ConsoleHelper;
+import ru.kovalev.boxesloader.service.TruckLoadAnalyzer;
 
 import java.util.List;
 import java.util.Map;
@@ -19,10 +19,10 @@ public class CalculateBoxesAction implements Action {
     /**
      * Конструктор для инициализации действия анализа содержимого грузовиков.
      *
-     * @param truckReader сервис для чтения грузовиков из JSON.
+     * @param truckReader       сервис для чтения грузовиков из JSON.
      * @param truckLoadAnalyzer анализатор загрузки грузовиков.
-     * @param scanner объект для считывания пользовательского ввода.
-     * @param consoleHelper сервис для вывода информации в консоль.
+     * @param scanner           объект для считывания пользовательского ввода.
+     * @param consoleHelper     сервис для вывода информации в консоль.
      */
     public CalculateBoxesAction(JsonReader<Truck> truckReader, TruckLoadAnalyzer truckLoadAnalyzer, Scanner scanner,
                                 ConsoleHelper consoleHelper) {

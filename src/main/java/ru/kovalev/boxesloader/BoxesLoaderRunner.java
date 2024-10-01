@@ -6,7 +6,13 @@ import ru.kovalev.boxesloader.controller.BoxLoaderController;
 import ru.kovalev.boxesloader.interfaces.JsonReader;
 import ru.kovalev.boxesloader.model.Box;
 import ru.kovalev.boxesloader.model.Truck;
-import ru.kovalev.boxesloader.service.*;
+import ru.kovalev.boxesloader.service.BoxLoader;
+import ru.kovalev.boxesloader.service.BoxPlacementFinder;
+import ru.kovalev.boxesloader.service.BoxReader;
+import ru.kovalev.boxesloader.service.ConsoleHelper;
+import ru.kovalev.boxesloader.service.TruckGenerator;
+import ru.kovalev.boxesloader.service.TruckLoadAnalyzer;
+import ru.kovalev.boxesloader.service.TruckReader;
 
 import java.util.Scanner;
 

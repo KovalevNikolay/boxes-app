@@ -25,7 +25,8 @@ public class TruckReader implements JsonReader<Truck> {
     public List<Truck> read(String path) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.readValue(new File(path), new TypeReference<>() {});
+            return objectMapper.readValue(new File(path), new TypeReference<>() {
+            });
         } catch (IOException e) {
             log.error("Ошибка при чтении файла." + e.getMessage());
             throw new FileReadingException("Произошла ошибка при чтении файла: " + path, e);
