@@ -1,7 +1,7 @@
-package ru.kovalev.boxesloader.controller;
+package ru.kovalev.boxesapp.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.kovalev.boxesloader.interfaces.Action;
+import ru.kovalev.boxesapp.interfaces.Action;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,9 +1,10 @@
 package ru.kovalev.boxesloader.service;
 
 import org.junit.jupiter.api.Test;
-import ru.kovalev.boxesloader.exception.FileReadingException;
-import ru.kovalev.boxesloader.interfaces.JsonReader;
-import ru.kovalev.boxesloader.model.Truck;
+import ru.kovalev.boxesapp.exception.FileReadingException;
+import ru.kovalev.boxesapp.interfaces.JsonReader;
+import ru.kovalev.boxesapp.model.Truck;
+import ru.kovalev.boxesapp.service.TruckReader;
 
 import java.util.List;
 

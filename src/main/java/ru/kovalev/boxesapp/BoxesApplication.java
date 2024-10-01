@@ -1,22 +1,22 @@
-package ru.kovalev.boxesloader;
+package ru.kovalev.boxesapp;
 
-import ru.kovalev.boxesloader.actions.CalculateBoxesAction;
-import ru.kovalev.boxesloader.actions.LoadBoxesAction;
-import ru.kovalev.boxesloader.controller.BoxLoaderController;
-import ru.kovalev.boxesloader.interfaces.JsonReader;
-import ru.kovalev.boxesloader.model.Box;
-import ru.kovalev.boxesloader.model.Truck;
-import ru.kovalev.boxesloader.service.BoxLoader;
-import ru.kovalev.boxesloader.service.BoxPlacementFinder;
-import ru.kovalev.boxesloader.service.BoxReader;
-import ru.kovalev.boxesloader.service.ConsoleHelper;
-import ru.kovalev.boxesloader.service.TruckGenerator;
-import ru.kovalev.boxesloader.service.TruckLoadAnalyzer;
-import ru.kovalev.boxesloader.service.TruckReader;
+import ru.kovalev.boxesapp.action.CalculateBoxesAction;
+import ru.kovalev.boxesapp.action.LoadBoxesAction;
+import ru.kovalev.boxesapp.controller.BoxLoaderController;
+import ru.kovalev.boxesapp.interfaces.JsonReader;
+import ru.kovalev.boxesapp.model.Box;
+import ru.kovalev.boxesapp.model.Truck;
+import ru.kovalev.boxesapp.service.BoxLoader;
+import ru.kovalev.boxesapp.service.BoxPlacementFinder;
+import ru.kovalev.boxesapp.service.BoxReader;
+import ru.kovalev.boxesapp.service.ConsoleHelper;
+import ru.kovalev.boxesapp.service.TruckGenerator;
+import ru.kovalev.boxesapp.service.TruckLoadAnalyzer;
+import ru.kovalev.boxesapp.service.TruckReader;
 
 import java.util.Scanner;
 
-public class BoxesLoaderRunner {
+public class BoxesApplication {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         BoxLoader boxLoader = new BoxLoader(new BoxPlacementFinder());

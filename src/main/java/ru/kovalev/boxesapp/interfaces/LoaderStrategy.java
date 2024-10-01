@@ -1,7 +1,7 @@
-package ru.kovalev.boxesloader.interfaces;
+package ru.kovalev.boxesapp.interfaces;
 
-import ru.kovalev.boxesloader.model.Box;
-import ru.kovalev.boxesloader.model.Truck;
+import ru.kovalev.boxesapp.model.Box;
+import ru.kovalev.boxesapp.model.Truck;
 
 import java.util.List;
 

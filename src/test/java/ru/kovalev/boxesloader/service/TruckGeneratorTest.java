@@ -1,7 +1,8 @@
 package ru.kovalev.boxesloader.service;
 
 import org.junit.jupiter.api.Test;
-import ru.kovalev.boxesloader.model.Truck;
+import ru.kovalev.boxesapp.model.Truck;
+import ru.kovalev.boxesapp.service.TruckGenerator;
 
 import java.util.List;
 

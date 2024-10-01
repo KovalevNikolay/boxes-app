@@ -1,6 +1,7 @@
 package ru.kovalev.boxesloader.model;
 
 import org.junit.jupiter.api.Test;
+import ru.kovalev.boxesapp.model.Truck;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

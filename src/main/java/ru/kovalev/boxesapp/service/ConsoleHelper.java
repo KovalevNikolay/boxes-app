@@ -1,6 +1,6 @@
-package ru.kovalev.boxesloader.service;
+package ru.kovalev.boxesapp.service;
 
-import ru.kovalev.boxesloader.model.Truck;
+import ru.kovalev.boxesapp.model.Truck;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class ConsoleHelper {
     /**
      * Выводит в консоль информацию о грузовике и количестве посылок в нем
      *
-     * @param truck        грузовик для которого выводится информацию
+     * @param truck грузовик для которого выводится информацию
      * @param boxesInTruck - map, где ключ - тип посылки, значение - количество посылок данного типа
      */
     public void printBoxesInTruck(Truck truck, Map<Integer, Integer> boxesInTruck) {

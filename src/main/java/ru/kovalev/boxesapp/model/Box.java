@@ -1,4 +1,4 @@
-package ru.kovalev.boxesloader.model;
+package ru.kovalev.boxesapp.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

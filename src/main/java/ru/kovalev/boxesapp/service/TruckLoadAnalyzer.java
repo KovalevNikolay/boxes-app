@@ -1,7 +1,7 @@
-package ru.kovalev.boxesloader.service;
+package ru.kovalev.boxesapp.service;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.kovalev.boxesloader.model.Truck;
+import ru.kovalev.boxesapp.model.Truck;
 
 import java.util.HashMap;
 import java.util.Map;

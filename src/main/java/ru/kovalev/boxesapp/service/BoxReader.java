@@ -1,11 +1,11 @@
-package ru.kovalev.boxesloader.service;
+package ru.kovalev.boxesapp.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import ru.kovalev.boxesloader.exception.FileReadingException;
-import ru.kovalev.boxesloader.interfaces.JsonReader;
-import ru.kovalev.boxesloader.model.Box;
+import ru.kovalev.boxesapp.exception.FileReadingException;
+import ru.kovalev.boxesapp.interfaces.JsonReader;
+import ru.kovalev.boxesapp.model.Box;
 
 import java.io.File;
 import java.io.IOException;

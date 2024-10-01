@@ -1,10 +1,10 @@
-package ru.kovalev.boxesloader.actions;
+package ru.kovalev.boxesapp.action;
 
-import ru.kovalev.boxesloader.interfaces.Action;
-import ru.kovalev.boxesloader.interfaces.JsonReader;
-import ru.kovalev.boxesloader.model.Truck;
-import ru.kovalev.boxesloader.service.ConsoleHelper;
-import ru.kovalev.boxesloader.service.TruckLoadAnalyzer;
+import ru.kovalev.boxesapp.interfaces.Action;
+import ru.kovalev.boxesapp.interfaces.JsonReader;
+import ru.kovalev.boxesapp.service.ConsoleHelper;
+import ru.kovalev.boxesapp.service.TruckLoadAnalyzer;
+import ru.kovalev.boxesapp.model.Truck;
 
 import java.util.List;
 import java.util.Map;

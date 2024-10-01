@@ -1,10 +1,12 @@
 package ru.kovalev.boxesloader.service;
 
 import org.junit.jupiter.api.Test;
-import ru.kovalev.boxesloader.exception.BoxLoaderException;
-import ru.kovalev.boxesloader.exception.OversizedBoxException;
-import ru.kovalev.boxesloader.model.Box;
-import ru.kovalev.boxesloader.model.Truck;
+import ru.kovalev.boxesapp.exception.BoxLoaderException;
+import ru.kovalev.boxesapp.exception.OversizedBoxException;
+import ru.kovalev.boxesapp.model.Box;
+import ru.kovalev.boxesapp.model.Truck;
+import ru.kovalev.boxesapp.service.BoxLoader;
+import ru.kovalev.boxesapp.service.BoxPlacementFinder;
 
 import java.util.ArrayList;
 import java.util.List;
