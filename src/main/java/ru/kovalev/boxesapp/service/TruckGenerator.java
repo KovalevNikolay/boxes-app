@@ -1,12 +1,14 @@
 package ru.kovalev.boxesapp.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import ru.kovalev.boxesapp.model.Truck;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Service
 public class TruckGenerator {
 
     /**
