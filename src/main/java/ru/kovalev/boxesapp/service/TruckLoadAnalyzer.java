@@ -37,9 +37,7 @@ public class TruckLoadAnalyzer {
             for (String marker : row) {
                 if (marker != null) {
                     Optional<Box> boxByMarker = boxesRepository.findByMarker(marker);
-                    boxByMarker.ifPresentOrElse(box -> {
-                                updateBoxCount(box, boxes);
-                            },
+                    boxByMarker.ifPresentOrElse(box -> updateBoxCount(box, boxes),
                             () -> log.error("Посылка с маркером \"{}\" не найдена.", marker)
                     );
 
