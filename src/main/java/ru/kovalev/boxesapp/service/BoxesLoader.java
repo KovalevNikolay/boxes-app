@@ -3,7 +3,7 @@ package ru.kovalev.boxesapp.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.kovalev.boxesapp.exception.BoxLoaderException;
-import ru.kovalev.boxesapp.exception.OversizedBoxException;
+import ru.kovalev.boxesapp.exception.OversizeBoxException;
 import ru.kovalev.boxesapp.model.Box;
 import ru.kovalev.boxesapp.model.LoaderStrategy;
 import ru.kovalev.boxesapp.model.Truck;
@@ -112,7 +112,7 @@ public class BoxesLoader {
         if (boxHeight > truckBody.size() || boxLength > truckBody.getFirst().size()) {
             log.error("Размер посылки превышают размер кузова. Посылка: H={}, L={}, Кузов: H={}, L={}",
                     boxHeight, boxLength, truckBody.size(), truckBody.getFirst().size());
-            throw new OversizedBoxException("Габариты посылки не могут превышать размеры кузова.");
+            throw new OversizeBoxException("Габариты посылки не могут превышать размеры кузова.");
         }
 
         int[] position = placementFinder.findPositionForBox(truckBody, boxHeight, boxLength);
