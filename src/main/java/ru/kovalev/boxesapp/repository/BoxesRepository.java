@@ -5,8 +5,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.kovalev.boxesapp.model.Box;
-import ru.kovalev.boxesapp.io.BoxesReader;
-import ru.kovalev.boxesapp.io.BoxesWriter;
+import ru.kovalev.boxesapp.io.BoxesInputOutput;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -18,13 +17,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoxesRepository {
     private final Path path = Path.of("src", "main", "resources", "boxes.json");
-    private final BoxesReader boxesReader;
-    private final BoxesWriter boxesWriter;
+    private final BoxesInputOutput boxesInputOutput;
     private Map<String, Box> boxes;
 
     @PostConstruct
     public void init() {
-        boxes = boxesReader.read(path).stream()
+        boxes = boxesInputOutput.read(path).stream()
                 .collect(Collectors.toMap(Box::getName, box -> box));
     }
 
@@ -52,21 +50,21 @@ public class BoxesRepository {
 
     public boolean update(Box box) {
         if (boxes.containsKey(box.getName())) {
-            save(box);
+            boxes.put(box.getName(), box);
             return true;
         }
         return false;
     }
 
-    public void save(Box box) {
-        boxes.put(box.getName(), box);
+    public boolean save(Box box) {
+        if (!boxes.containsKey(box.getName())) {
+            boxes.put(box.getName(), box);
+            return true;
+        }
+        return false;
     }
 
     public void saveAll() {
-        boxesWriter.write(boxes.values().stream().toList(), path);
-    }
-
-    public boolean existsByName(String name) {
-        return boxes.containsKey(name);
+        boxesInputOutput.write(boxes.values().stream().toList(), path);
     }
 }

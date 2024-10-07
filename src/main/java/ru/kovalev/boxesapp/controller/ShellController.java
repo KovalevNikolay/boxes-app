@@ -4,27 +4,39 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import ru.kovalev.boxesapp.model.Box;
+import ru.kovalev.boxesapp.service.BoxesService;
+import ru.kovalev.boxesapp.service.TruckLoadAnalyzer;
+
+import java.util.stream.Collectors;
 
 @ShellComponent
 @RequiredArgsConstructor
 public class ShellController {
 
-    private final BoxesController boxesController;
+    private final BoxesService boxesService;
     private final BoxesLoadController boxesLoadController;
-    private final TruckBodyAnalyzeController truckBodyAnalyzeController;
+    private final TruckLoadAnalyzer truckLoadAnalyzer;
+
     @ShellMethod("посмотреть все посылки")
     public String boxes() {
-        return boxesController.getAll();
+        return boxesService.getAll().stream()
+                .map(Box::toString)
+                .collect(Collectors.joining());
     }
 
     @ShellMethod("посмотреть посылку по названию")
     public String box(@ShellOption(value = "--name") String name) {
-        return boxesController.getByName(name);
+        return boxesService.getByName(name)
+                .map(Box::toString)
+                .orElse("Посылка с именем '%s' не найдена.".formatted(name));
     }
 
     @ShellMethod("удалить посылку")
     public String deleteBox(@ShellOption(value = "--name") String name) {
-        return boxesController.deleteBox(name);
+        return boxesService.delete(name)
+                ? "Посылка '%s' удалена".formatted(name)
+                : "Посылка с именем '%s' не найдена.".formatted(name);
     }
 
     @ShellMethod("добавить посылку")
@@ -32,7 +44,9 @@ public class ShellController {
                          @ShellOption(value = "--body") String body,
                          @ShellOption(value = "--marker") String marker
     ) {
-        return boxesController.addBox(name, body, marker);
+        return boxesService.add(name, body, marker)
+                ? "Посылка '%s' добавлена.".formatted(name)
+                : "Посылка с именем '%s' уже существует.".formatted(name);
     }
 
     @ShellMethod("обновить посылку")
@@ -40,12 +54,14 @@ public class ShellController {
                             @ShellOption(value = "--body") String body,
                             @ShellOption(value = "--marker") String marker
     ) {
-        return boxesController.updateBox(name, body, marker);
+        return boxesService.update(name, body, marker)
+                ? "Посылки с именем '%s' не найдено.".formatted(name)
+                : "Посылка '%s' успешно обновлена.".formatted(name);
     }
 
     @ShellMethod("сохранить посылки")
-    public String saveAll() {
-        return boxesController.saveAll();
+    public void saveAll() {
+        boxesService.saveAll();
     }
 
     @ShellMethod("погрузить посылки")
@@ -66,6 +82,6 @@ public class ShellController {
     }
 
     public String truckAnalyze(@ShellOption(value = "--path") String path) {
-        return truckBodyAnalyzeController.analyze(path);
+        return truckLoadAnalyzer.getAnalyze(path);
     }
 }

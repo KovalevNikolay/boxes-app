@@ -1,15 +1,13 @@
 package ru.kovalev.boxesapp.mapper;
 
 import org.springframework.stereotype.Service;
-import ru.kovalev.boxesapp.interfaces.Mapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MatrixMapper implements Mapper<String, List<List<String>>> {
-    @Override
-    public List<List<String>> mapFrom(String input) {
+public class MatrixMapper {
+    public List<List<String>> mapToMatrix(String input) {
         String[] rows = input.split(";");
         List<List<String>> matrix = new ArrayList<>();
 

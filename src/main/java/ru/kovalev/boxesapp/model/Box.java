@@ -106,13 +106,13 @@ public class Box implements Comparable<Box> {
     /**
      * Сравнивает две посылки по их площади
      *
-     * @param o другая посылка
+     * @param box другая посылка
      * @return отрицательное значение, если текущая посылка меньше
      * положительное значение, если текущая посылка больше
      * ноль, если маркеры посылок равны
      */
     @Override
-    public int compareTo(Box o) {
-        return Integer.compare(getOccupiedSpace(), o.getOccupiedSpace());
+    public int compareTo(Box box) {
+        return Integer.compare(getOccupiedSpace(), box.getOccupiedSpace());
     }
 }

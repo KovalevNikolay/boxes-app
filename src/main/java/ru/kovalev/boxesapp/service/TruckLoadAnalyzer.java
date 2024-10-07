@@ -3,10 +3,12 @@ package ru.kovalev.boxesapp.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.kovalev.boxesapp.io.TruckInputOutput;
 import ru.kovalev.boxesapp.model.Box;
 import ru.kovalev.boxesapp.model.Truck;
 import ru.kovalev.boxesapp.repository.BoxesRepository;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +18,31 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TruckLoadAnalyzer {
+
     private final BoxesRepository boxesRepository;
+    private final TruckInputOutput truckInputOutput;
+
+    public String getAnalyze(String path) {
+        List<Truck> trucks = truckInputOutput.read(Path.of(path));
+        StringBuilder result = new StringBuilder();
+        for (Truck truck : trucks) {
+            Map<Box, Integer> analyzeResult = analyze(truck);
+            result.append(toString(truck, analyzeResult));
+        }
+        return result.toString();
+    }
+
+    private String toString(Truck truck, Map<Box, Integer> boxesInTruck) {
+        StringBuilder resultAnalyze = new StringBuilder();
+        resultAnalyze.append("Грузовик:\n").append(truck).append("Посылки:\n");
+        for (Map.Entry<Box, Integer> box : boxesInTruck.entrySet()) {
+            resultAnalyze.append(box.getKey().getName())
+                    .append(" - ")
+                    .append(box.getValue())
+                    .append(" шт.");
+        }
+        return resultAnalyze.append("\n").toString();
+    }
 
     /**
      * Анализирует загруженность грузовика и возвращает посылки, находящиеся в кузове
@@ -24,7 +50,7 @@ public class TruckLoadAnalyzer {
      * @param truck грузовик, загруженность которого необходимо проанализировать
      * @return map, где ключ - тип посылки, значение - количество посылок данного типа
      */
-    public Map<Box, Integer> analyze(Truck truck) {
+    private Map<Box, Integer> analyze(Truck truck) {
         log.info("Начат анализ загруженности грузовика с параметрами: Высота = {}, Длина = {}",
                 truck.getBody().size(), truck.getBody().getFirst().size());
 
@@ -37,7 +63,8 @@ public class TruckLoadAnalyzer {
             for (String marker : row) {
                 if (marker != null) {
                     Optional<Box> boxByMarker = boxesRepository.findByMarker(marker);
-                    boxByMarker.ifPresentOrElse(box -> updateBoxCount(box, boxes),
+                    boxByMarker.ifPresentOrElse(
+                            box -> updateBoxCount(box, boxes),
                             () -> log.error("Посылка с маркером \"{}\" не найдена.", marker)
                     );
 
