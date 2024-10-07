@@ -51,9 +51,9 @@ public class Box implements Comparable<Box> {
     }
 
     /**
-     * Возвращает площадь, занимаемую посылкой
+     * Количество ячеек, которое занимает посылка
      *
-     * @return площадь посылки
+     * @return Количество ячеек, которое занимает посылка
      */
 
     public Integer getOccupiedSpace() {
