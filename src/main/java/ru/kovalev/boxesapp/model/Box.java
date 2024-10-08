@@ -3,11 +3,13 @@ package ru.kovalev.boxesapp.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
+@EqualsAndHashCode
 public class Box implements Comparable<Box> {
     @Getter
     private final String name;
@@ -104,7 +106,7 @@ public class Box implements Comparable<Box> {
                 body:
                 %s
                 marker: '%s'
-                
+                                
                 """.formatted(name, bodyBuilder.toString(), marker);
     }
 
