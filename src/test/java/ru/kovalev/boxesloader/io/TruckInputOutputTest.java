@@ -1,4 +1,4 @@
-package ru.kovalev.boxesloader.service;
+package ru.kovalev.boxesloader.io;
 
 import org.junit.jupiter.api.Test;
 import ru.kovalev.boxesapp.exception.FileReadingException;

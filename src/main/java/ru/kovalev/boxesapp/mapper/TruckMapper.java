@@ -1,9 +1,11 @@
 package ru.kovalev.boxesapp.mapper;
 
+import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Service;
 import ru.kovalev.boxesapp.model.Truck;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -12,6 +14,10 @@ public class TruckMapper {
     private static final int LENGTH_INDEX = 1;
 
     public List<Truck> mapToList(String input) {
+        if (StringUtils.isBlank(input)) {
+            return Collections.emptyList();
+        }
+
         List<Truck> trucks = new ArrayList<>();
         String[] truckSizes = input.split(",");
 

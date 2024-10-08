@@ -2,6 +2,7 @@ package ru.kovalev.boxesapp.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import ru.kovalev.boxesapp.exception.BoxLoaderException;
 import ru.kovalev.boxesapp.exception.OversizeBoxException;
 import ru.kovalev.boxesapp.model.Box;
@@ -36,18 +37,19 @@ public class BoxesLoader {
     }
 
     private List<Truck> loadBoxes(List<Box> boxes, List<Truck> trucks, ToIntBiFunction<List<Box>, List<Truck>> loadFunction) {
-        log.info("Начало загрузки посылок. Количество посылок: {} шт., Количество грузовиков: {} шт.",
-                boxes.size(), trucks.size());
 
-        if (boxes == null || boxes.isEmpty()) {
+        if (CollectionUtils.isEmpty(boxes)) {
             log.warn("Список посылок пуст.");
             return Collections.emptyList();
         }
 
-        if (trucks == null || trucks.isEmpty()) {
+        if (CollectionUtils.isEmpty(trucks)) {
             log.warn("Список грузовиков пуст.");
             return Collections.emptyList();
         }
+
+        log.info("Начало загрузки посылок. Количество посылок: {} шт., Количество грузовиков: {} шт.",
+                boxes.size(), trucks.size());
 
         boxes.sort(Comparator.reverseOrder());
         log.debug("Посылки отсортированы по убыванию размера.");
@@ -55,8 +57,8 @@ public class BoxesLoader {
         int countLoadedBoxes = loadFunction.applyAsInt(boxes, trucks);
 
         if (countLoadedBoxes != boxes.size()) {
-            throw new BoxLoaderException("Ошибка распределения посылок. Количество посылок, которые не поместились: "
-                    + (boxes.size() - countLoadedBoxes));
+            throw new BoxLoaderException("Ошибка распределения посылок. Количество посылок, которые не поместились: %d"
+                                                 .formatted((boxes.size() - countLoadedBoxes)));
         }
 
         log.info("Загрузка успешно завершена.");

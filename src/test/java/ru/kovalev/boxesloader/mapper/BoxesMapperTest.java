@@ -1,6 +1,5 @@
 package ru.kovalev.boxesloader.mapper;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,8 +22,7 @@ class BoxesMapperTest {
     @InjectMocks
     private BoxesMapper boxesMapper;
 
-    @BeforeEach
-    public void setUp() {
+    BoxesMapperTest() {
         MockitoAnnotations.openMocks(this);
     }
 
