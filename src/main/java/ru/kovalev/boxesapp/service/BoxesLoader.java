@@ -1,18 +1,22 @@
 package ru.kovalev.boxesapp.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import ru.kovalev.boxesapp.exception.BoxLoaderException;
-import ru.kovalev.boxesapp.exception.OversizedBoxException;
-import ru.kovalev.boxesapp.interfaces.LoaderStrategy;
+import ru.kovalev.boxesapp.exception.OversizeBoxException;
 import ru.kovalev.boxesapp.model.Box;
+import ru.kovalev.boxesapp.model.LoaderStrategy;
 import ru.kovalev.boxesapp.model.Truck;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.ToIntBiFunction;
 
 @Slf4j
-public class BoxLoader {
+@Service
+public class BoxesLoader {
     private final BoxPlacementFinder placementFinder;
 
     /**
@@ -20,56 +24,41 @@ public class BoxLoader {
      *
      * @param placementFinder объект, используемый для нахождения места для посылки в грузовике
      */
-    public BoxLoader(BoxPlacementFinder placementFinder) {
+    public BoxesLoader(BoxPlacementFinder placementFinder) {
         this.placementFinder = placementFinder;
     }
 
-    /**
-     * Выполняет погрузку посылок с использованием алгоритма качественной (плотной) погрузки
-     *
-     * @param boxes  список посылок для загрузки
-     * @param trucks список грузовиков для распределения посылок
-     * @return обновленный список грузовиков после загрузки
-     * @throws BoxLoaderException если не все посылки поместились в кузов грузовика
-     */
-    public List<Truck> qualityLoading(List<Box> boxes, List<Truck> trucks) {
-        return loadBoxes(boxes, trucks, this::loadQuality);
+
+    public List<Truck> load(List<Box> boxes, List<Truck> trucks, LoaderStrategy loaderStrategy) {
+        return switch (loaderStrategy) {
+            case QUALITY -> loadBoxes(boxes, trucks, this::loadQuality);
+            case UNIFORM -> loadBoxes(boxes, trucks, this::loadUniform);
+        };
     }
 
-    /**
-     * Выполняет погрузку посылок с использованием алгоритма равномерной погрузки
-     *
-     * @param boxes  список посылок для загрузки
-     * @param trucks список грузовиков для распределения посылок
-     * @return обновленный список грузовиков после загрузки
-     * @throws BoxLoaderException если не все посылки поместились в кузов грузовика
-     */
-    public List<Truck> uniformLoading(List<Box> boxes, List<Truck> trucks) {
-        return loadBoxes(boxes, trucks, this::loadUniform);
-    }
+    private List<Truck> loadBoxes(List<Box> boxes, List<Truck> trucks, ToIntBiFunction<List<Box>, List<Truck>> loadFunction) {
 
-    private List<Truck> loadBoxes(List<Box> boxes, List<Truck> trucks, LoaderStrategy loaderStrategy) {
-        log.info("Начало загрузки посылок. Количество посылок: {} шт., Количество грузовиков: {} шт.",
-                boxes.size(), trucks.size());
-
-        if (boxes == null || boxes.isEmpty()) {
+        if (CollectionUtils.isEmpty(boxes)) {
             log.warn("Список посылок пуст.");
             return Collections.emptyList();
         }
 
-        if (trucks == null || trucks.isEmpty()) {
+        if (CollectionUtils.isEmpty(trucks)) {
             log.warn("Список грузовиков пуст.");
             return Collections.emptyList();
         }
 
+        log.info("Начало загрузки посылок. Количество посылок: {} шт., Количество грузовиков: {} шт.",
+                boxes.size(), trucks.size());
+
         boxes.sort(Comparator.reverseOrder());
         log.debug("Посылки отсортированы по убыванию размера.");
 
-        int countLoadedBoxes = loaderStrategy.load(boxes, trucks);
+        int countLoadedBoxes = loadFunction.applyAsInt(boxes, trucks);
 
         if (countLoadedBoxes != boxes.size()) {
-            throw new BoxLoaderException("Ошибка распределения посылок. Количество посылок, которые не поместились: "
-                    + (boxes.size() - countLoadedBoxes));
+            throw new BoxLoaderException("Ошибка распределения посылок. Количество посылок, которые не поместились: %d"
+                                                 .formatted((boxes.size() - countLoadedBoxes)));
         }
 
         log.info("Загрузка успешно завершена.");
@@ -82,7 +71,7 @@ public class BoxLoader {
         int countLoadedBoxes = 0;
 
         for (Box box : boxes) {
-            log.info("Попытка загрузки посылки с размерами: Высота = {}, Длина = {}", box.getHeight(), box.getMaxLength());
+            log.info("Попытка загрузки посылки с размерами: Высота = {}, Длина = {}", box.getHeight(), box.getLength());
             boolean isLoad;
             for (Truck truck : trucks) {
                 isLoad = loadToTruck(box, truck);
@@ -105,7 +94,7 @@ public class BoxLoader {
             Truck truck = placementFinder.findTruckWithMinLoadCapacity(trucks);
             int currentLoadCapacity = truck.getLoadCapacity();
             if (loadToTruck(box, truck)) {
-                truck.setLoadCapacity(currentLoadCapacity + box.getMarker());
+                truck.setLoadCapacity(currentLoadCapacity + box.getOccupiedSpace());
                 log.info("Посылка успешно загружена в грузовик.");
                 countLoadedBoxes++;
             }
@@ -115,17 +104,17 @@ public class BoxLoader {
 
 
     private boolean loadToTruck(Box box, Truck truck) {
-        Integer[][] truckBody = truck.getBody();
+        List<List<String>> truckBody = truck.getBody();
         int boxHeight = box.getHeight();
-        int boxLength = box.getMaxLength();
+        int boxLength = box.getLength();
 
         log.debug("Проверка размеров посылки и кузова грузовика: Посылка ({}x{}), Кузов ({}x{})",
-                boxHeight, boxLength, truckBody.length, truckBody[0].length);
+                boxHeight, boxLength, truckBody.size(), truckBody.getFirst().size());
 
-        if (boxHeight > truckBody.length || boxLength > truckBody[0].length) {
+        if (boxHeight > truckBody.size() || boxLength > truckBody.getFirst().size()) {
             log.error("Размер посылки превышают размер кузова. Посылка: H={}, L={}, Кузов: H={}, L={}",
-                    boxHeight, boxLength, truckBody.length, truckBody[0].length);
-            throw new OversizedBoxException("Габариты посылки не могут превышать размеры кузова.");
+                    boxHeight, boxLength, truckBody.size(), truckBody.getFirst().size());
+            throw new OversizeBoxException("Габариты посылки не могут превышать размеры кузова.");
         }
 
         int[] position = placementFinder.findPositionForBox(truckBody, boxHeight, boxLength);
@@ -136,15 +125,15 @@ public class BoxLoader {
         }
 
         log.debug("Выполнятся погрузка посылки: H={}, L={}", boxHeight, boxLength);
-        performLoading(box.getMarker(), truckBody, box.sizes(), position[0], position[1]);
+        performLoading(box.getMarker(), truckBody, box.getBody(), position[0], position[1]);
         return true;
     }
 
-    private void performLoading(Integer marker, Integer[][] truckBody, int[][] boxDimensions, int vertical, int left) {
+    private void performLoading(String marker, List<List<String>> truckBody, List<List<String>> boxBody, int vertical, int left) {
         log.debug("Процесс загрузки посылки с маркером {} в грузовик.", marker);
-        for (int i = boxDimensions.length - 1; i >= 0; i--) {
-            for (int j = 0; j < boxDimensions[i].length; j++) {
-                truckBody[vertical][left + j] = marker;
+        for (int i = boxBody.size() - 1; i >= 0; i--) {
+            for (int j = 0; j < boxBody.get(i).size(); j++) {
+                truckBody.get(vertical).set(left+j, marker);
             }
             vertical--;
         }

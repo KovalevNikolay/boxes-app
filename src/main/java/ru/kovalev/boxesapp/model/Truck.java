@@ -5,13 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-@Getter
 public class Truck {
-    private final Integer[][] body;
+    @Getter
+    private final List<List<String>> body;
+    @Getter
     @Setter
     private int loadCapacity;
+    private String view;
 
     /**
      * Конструктор для создания грузовика с заданной высотой и длиной кузова
@@ -20,7 +25,10 @@ public class Truck {
      * @param length длина кузова
      */
     public Truck(int height, int length) {
-        body = new Integer[height][length];
+        body = new ArrayList<>();
+        for (int i = 0; i < height; i++) {
+            body.add(Arrays.asList(new String[length]));
+        }
         loadCapacity = 0;
     }
 
@@ -30,7 +38,7 @@ public class Truck {
      * @param body двумерный массив - кузов грузовика
      */
     @JsonCreator
-    public Truck(@JsonProperty("body") Integer[][] body) {
+    public Truck(@JsonProperty("body") List<List<String>> body) {
         this.body = body;
         loadCapacity = 0;
     }
@@ -42,17 +50,24 @@ public class Truck {
      */
     @Override
     public String toString() {
+        if (view == null) {
+            view = calculateView();
+        }
+        return view;
+    }
+
+    private String calculateView() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (Integer[] row : body) {
+        for (List<String> row : body) {
             stringBuilder.append("+");
-            for (Integer cell : row) {
+            for (String cell : row) {
                 stringBuilder.append(Objects.isNull(cell) ? " " : cell);
             }
             stringBuilder.append("+\n");
         }
 
-        stringBuilder.append("+".repeat(Math.max(0, body.length + 2)));
+        stringBuilder.append("+".repeat(Math.max(0, body.size() + 2)));
 
         return stringBuilder.toString();
     }

@@ -93,22 +93,22 @@ public static void main(String[] args) {
 ```json
 [
   {
-    "sizes": [
+    "body": [
       [1]
     ]
   },
   {
-    "sizes": [
+    "body": [
       [2, 2]
     ]
   },
   {
-    "sizes": [
+    "body": [
       [5, 5, 5, 5, 5]
     ]
   },
   {
-    "sizes": [
+    "body": [
       [6,6,6],
       [6,6,6]
     ]
