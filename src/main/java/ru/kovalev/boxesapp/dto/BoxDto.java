@@ -1,16 +1,14 @@
-package ru.kovalev.boxesapp.model;
+package ru.kovalev.boxesapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-@EqualsAndHashCode
-public class Box implements Comparable<Box> {
+public class BoxDto implements Comparable<BoxDto> {
     @Getter
     private final String name;
     @Getter
@@ -31,7 +29,7 @@ public class Box implements Comparable<Box> {
      * @param body двумерный массив целых чисел, представляющий размеры посылки.
      */
     @JsonCreator
-    public Box(@JsonProperty("name") String name, @JsonProperty("body") List<List<String>> body, @JsonProperty("marker") String marker) {
+    public BoxDto(@JsonProperty("name") String name, @JsonProperty("body") List<List<String>> body, @JsonProperty("marker") String marker) {
         this.name = name;
         this.body = body;
         this.marker = marker;
@@ -113,13 +111,13 @@ public class Box implements Comparable<Box> {
     /**
      * Сравнивает две посылки по их площади
      *
-     * @param box другая посылка
+     * @param boxDto другая посылка
      * @return отрицательное значение, если текущая посылка меньше
      * положительное значение, если текущая посылка больше
      * ноль, если маркеры посылок равны
      */
     @Override
-    public int compareTo(Box box) {
-        return Integer.compare(getOccupiedSpace(), box.getOccupiedSpace());
+    public int compareTo(BoxDto boxDto) {
+        return Integer.compare(getOccupiedSpace(), boxDto.getOccupiedSpace());
     }
 }

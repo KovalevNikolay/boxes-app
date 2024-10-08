@@ -1,6 +1,7 @@
-package ru.kovalev.boxesapp.model;
+package ru.kovalev.boxesapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +14,13 @@ import java.util.Objects;
 public class Truck {
     @Getter
     private final List<List<String>> body;
+
     @Getter
     @Setter
+    @JsonIgnore
     private int loadCapacity;
+
+    @JsonIgnore
     private String view;
 
     /**

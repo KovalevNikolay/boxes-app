@@ -1,7 +1,7 @@
 package ru.kovalev.boxesapp.printer;
 
 import org.springframework.stereotype.Service;
-import ru.kovalev.boxesapp.model.Truck;
+import ru.kovalev.boxesapp.dto.Truck;
 
 import java.util.List;
 

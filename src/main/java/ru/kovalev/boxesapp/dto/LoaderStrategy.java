@@ -1,4 +1,4 @@
-package ru.kovalev.boxesapp.model;
+package ru.kovalev.boxesapp.dto;
 
 public enum LoaderStrategy {
     QUALITY, UNIFORM

@@ -3,10 +3,9 @@ package ru.kovalev.boxesapp.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.kovalev.boxesapp.dto.BoxDto;
+import ru.kovalev.boxesapp.dto.Truck;
 import ru.kovalev.boxesapp.io.TruckInputOutput;
-import ru.kovalev.boxesapp.model.Box;
-import ru.kovalev.boxesapp.model.Truck;
-import ru.kovalev.boxesapp.repository.BoxesRepository;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -19,23 +18,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TruckLoadAnalyzer {
 
-    private final BoxesRepository boxesRepository;
+    private final BoxesService boxesService;
     private final TruckInputOutput truckInputOutput;
 
     public String getAnalyze(String path) {
         List<Truck> trucks = truckInputOutput.read(Path.of(path));
         StringBuilder result = new StringBuilder();
         for (Truck truck : trucks) {
-            Map<Box, Integer> analyzeResult = analyze(truck);
+            Map<BoxDto, Integer> analyzeResult = analyze(truck);
             result.append(toString(truck, analyzeResult));
         }
         return result.toString();
     }
 
-    private String toString(Truck truck, Map<Box, Integer> boxesInTruck) {
+    private String toString(Truck truck, Map<BoxDto, Integer> boxesInTruck) {
         StringBuilder resultAnalyze = new StringBuilder();
         resultAnalyze.append("Грузовик:\n").append(truck).append("Посылки:\n");
-        for (Map.Entry<Box, Integer> box : boxesInTruck.entrySet()) {
+        for (Map.Entry<BoxDto, Integer> box : boxesInTruck.entrySet()) {
             resultAnalyze.append(box.getKey().getName())
                     .append(" - ")
                     .append(box.getValue())
@@ -50,19 +49,19 @@ public class TruckLoadAnalyzer {
      * @param truck грузовик, загруженность которого необходимо проанализировать
      * @return map, где ключ - тип посылки, значение - количество посылок данного типа
      */
-    private Map<Box, Integer> analyze(Truck truck) {
+    private Map<BoxDto, Integer> analyze(Truck truck) {
         log.info("Начат анализ загруженности грузовика с параметрами: Высота = {}, Длина = {}",
                 truck.getBody().size(), truck.getBody().getFirst().size());
 
         List<List<String>> body = truck.getBody();
-        Map<Box, Integer> boxes = new HashMap<>();
+        Map<BoxDto, Integer> boxes = new HashMap<>();
 
         log.debug("Анализ содержимого кузова грузовика.");
 
         for (List<String> row : body) {
             for (String marker : row) {
                 if (marker != null) {
-                    Optional<Box> boxByMarker = boxesRepository.findByMarker(marker);
+                    Optional<BoxDto> boxByMarker = boxesService.findByMarker(marker);
                     boxByMarker.ifPresentOrElse(
                             box -> updateBoxCount(box, boxes),
                             () -> log.error("Посылка с маркером \"{}\" не найдена.", marker)
@@ -79,9 +78,9 @@ public class TruckLoadAnalyzer {
         return boxes;
     }
 
-    private void updateBoxCount(Box box, Map<Box, Integer> boxes) {
-        log.debug("Найдена посылка: {}", box.getName());
-        Integer currentCount = boxes.getOrDefault(box, 0);
-        boxes.put(box, ++currentCount);
+    private void updateBoxCount(BoxDto boxDto, Map<BoxDto, Integer> boxes) {
+        log.debug("Найдена посылка: {}", boxDto.getName());
+        Integer currentCount = boxes.getOrDefault(boxDto, 0);
+        boxes.put(boxDto, ++currentCount);
     }
 }

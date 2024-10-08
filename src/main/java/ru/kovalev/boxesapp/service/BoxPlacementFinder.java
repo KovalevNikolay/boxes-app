@@ -2,7 +2,7 @@ package ru.kovalev.boxesapp.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.kovalev.boxesapp.model.Truck;
+import ru.kovalev.boxesapp.dto.Truck;
 
 import java.util.List;
 import java.util.Objects;

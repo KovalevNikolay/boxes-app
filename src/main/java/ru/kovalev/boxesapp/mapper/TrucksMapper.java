@@ -2,14 +2,14 @@ package ru.kovalev.boxesapp.mapper;
 
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Service;
-import ru.kovalev.boxesapp.model.Truck;
+import ru.kovalev.boxesapp.dto.Truck;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Service
-public class TruckMapper {
+public class TrucksMapper {
     private static final int HEIGHT_INDEX = 0;
     private static final int LENGTH_INDEX = 1;
 

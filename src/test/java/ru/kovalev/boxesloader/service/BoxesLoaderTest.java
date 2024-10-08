@@ -3,9 +3,9 @@ package ru.kovalev.boxesloader.service;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import ru.kovalev.boxesapp.model.Box;
-import ru.kovalev.boxesapp.model.LoaderStrategy;
-import ru.kovalev.boxesapp.model.Truck;
+import ru.kovalev.boxesapp.dto.BoxDto;
+import ru.kovalev.boxesapp.dto.LoaderStrategy;
+import ru.kovalev.boxesapp.dto.Truck;
 import ru.kovalev.boxesapp.service.BoxesLoader;
 
 import java.util.List;
@@ -39,16 +39,16 @@ class BoxesLoaderTest {
 
     @Test
     void whenTruckIsNullThenEmptyList() {
-        List<Truck> resultQuality = boxesLoader.load(List.of(new Box("", null, "")), null, LoaderStrategy.QUALITY);
-        List<Truck> resultUniform = boxesLoader.load(List.of(new Box("", null, "")), null, LoaderStrategy.UNIFORM);
+        List<Truck> resultQuality = boxesLoader.load(List.of(new BoxDto("", null, "")), null, LoaderStrategy.QUALITY);
+        List<Truck> resultUniform = boxesLoader.load(List.of(new BoxDto("", null, "")), null, LoaderStrategy.UNIFORM);
         assertThat(resultQuality).isEmpty();
         assertThat(resultUniform).isEmpty();
     }
 
     @Test
     void whenTruckIsEmptyThenEmptyList() {
-        List<Truck> resultQuality = boxesLoader.load(List.of(new Box("", null, "")), List.of(), LoaderStrategy.QUALITY);
-        List<Truck> resultUniform = boxesLoader.load(List.of(new Box("", null, "")), List.of(), LoaderStrategy.UNIFORM);
+        List<Truck> resultQuality = boxesLoader.load(List.of(new BoxDto("", null, "")), List.of(), LoaderStrategy.QUALITY);
+        List<Truck> resultUniform = boxesLoader.load(List.of(new BoxDto("", null, "")), List.of(), LoaderStrategy.UNIFORM);
         assertThat(resultQuality).isEmpty();
         assertThat(resultUniform).isEmpty();
     }

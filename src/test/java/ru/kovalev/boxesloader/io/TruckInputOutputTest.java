@@ -2,7 +2,7 @@ package ru.kovalev.boxesloader.io;
 
 import org.junit.jupiter.api.Test;
 import ru.kovalev.boxesapp.exception.FileReadingException;
-import ru.kovalev.boxesapp.model.Truck;
+import ru.kovalev.boxesapp.dto.Truck;
 import ru.kovalev.boxesapp.io.TruckInputOutput;
 
 import java.nio.file.Path;

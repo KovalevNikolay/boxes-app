@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.kovalev.boxesapp.exception.FileReadingException;
 import ru.kovalev.boxesapp.exception.FileWritingException;
-import ru.kovalev.boxesapp.model.Box;
+import ru.kovalev.boxesapp.dto.BoxDto;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class BoxesInputOutput {
-    public List<Box> read(Path path) {
+    public List<BoxDto> read(Path path) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(new File(path.toUri()), new TypeReference<>() {});
@@ -26,9 +26,9 @@ public class BoxesInputOutput {
         }
     }
 
-    public void write(List<Box> boxes, Path path) {
+    public void write(List<BoxDto> boxDtos, Path path) {
         try {
-            new ObjectMapper().writeValue(new File(path.toUri()), boxes);
+            new ObjectMapper().writeValue(new File(path.toUri()), boxDtos);
         } catch (IOException e) {
             log.error("Произошла ошибка при чтении файла: {}", path, e);
             throw new FileWritingException("Произошла ошибка при записи посылок в файл. ", e);
