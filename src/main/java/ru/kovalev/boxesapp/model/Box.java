@@ -1,6 +1,7 @@
 package ru.kovalev.boxesapp.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,9 @@ public class Box implements Comparable<Box> {
     @Getter
     @Setter
     private String marker;
+    @JsonIgnore
     private Integer occupiedSpace;
+    @JsonIgnore
     private String view;
 
     /**
@@ -37,6 +40,7 @@ public class Box implements Comparable<Box> {
      *
      * @return максимальная длина посылки
      */
+    @JsonIgnore
     public int getLength() {
         return body.getFirst().size();
     }
@@ -46,6 +50,7 @@ public class Box implements Comparable<Box> {
      *
      * @return высота посылки
      */
+    @JsonIgnore
     public int getHeight() {
         return body.size();
     }
