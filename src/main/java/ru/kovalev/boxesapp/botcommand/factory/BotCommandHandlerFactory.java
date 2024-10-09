@@ -29,7 +29,7 @@ public class BotCommandHandlerFactory {
 
     public CommandHandler getHandler(String command) {
         return switch (command) {
-            case "/start" -> new StartCommandHandler();
+            case "/start" -> new StartCommandHandler(sender);
             case "/boxes" -> new BoxesCommandHandler(proxy, sender);
             case "/box" -> new BoxCommandHandler(proxy, sender, parser);
             case "/addBox" -> new CreateBoxCommandHandler(proxy, sender, parser);
@@ -38,7 +38,7 @@ public class BotCommandHandlerFactory {
             case "/loadBoxes" -> new LoadBoxesCommandHandler(proxy, sender, parser);
             case "/loadBoxesFromFile" -> new LoadBoxesFromFileCommandHandler(proxy, sender, parser, downloader);
             case "/truckAnalyze" -> new TruckAnalyzeCommandHandler(proxy, sender, downloader);
-            default -> new HelpCommandHandler();
+            default -> new HelpCommandHandler(sender);
         };
     }
 }
