@@ -7,6 +7,7 @@ import ru.kovalev.boxesapp.entity.Box;
 import ru.kovalev.boxesapp.mapper.BoxesMapper;
 import ru.kovalev.boxesapp.repository.BoxesRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,17 +29,22 @@ public class BoxesService {
                 .map(boxesMapper::mapFrom);
     }
 
+    @Transactional
     public boolean delete(String name) {
-        return boxesRepository.deleteByName(name);
+        return boxesRepository.deleteByName(name) > 0;
     }
 
     public BoxDto add(String name, String body, String marker) {
         return boxesMapper.mapFrom(boxesRepository.save(new Box(null, name, body, marker)));
     }
 
+    @Transactional
     public boolean update(String name, String body, String marker) {
-        if (boxesRepository.existsByName(name)) {
-            add(name, body, marker);
+        Box box = boxesRepository.findByName(name).orElse(null);
+        if (box != null) {
+            box.setBody(body);
+            box.setMarker(marker);
+            boxesRepository.save(box);
             return true;
         }
         return false;
