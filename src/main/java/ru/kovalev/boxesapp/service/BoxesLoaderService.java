@@ -28,16 +28,16 @@ public class BoxesLoaderService {
     }
 
 
-    public List<Truck> load(List<BoxDto> boxDtos, List<Truck> trucks, LoaderStrategy loaderStrategy) {
+    public List<Truck> load(List<BoxDto> boxes, List<Truck> trucks, LoaderStrategy loaderStrategy) {
         return switch (loaderStrategy) {
-            case QUALITY -> loadBoxes(boxDtos, trucks, this::loadQuality);
-            case UNIFORM -> loadBoxes(boxDtos, trucks, this::loadUniform);
+            case QUALITY -> loadBoxes(boxes, trucks, this::loadQuality);
+            case UNIFORM -> loadBoxes(boxes, trucks, this::loadUniform);
         };
     }
 
-    private List<Truck> loadBoxes(List<BoxDto> boxDtos, List<Truck> trucks, ToIntBiFunction<List<BoxDto>, List<Truck>> loadFunction) {
+    private List<Truck> loadBoxes(List<BoxDto> boxes, List<Truck> trucks, ToIntBiFunction<List<BoxDto>, List<Truck>> loadFunction) {
 
-        if (CollectionUtils.isEmpty(boxDtos)) {
+        if (CollectionUtils.isEmpty(boxes)) {
             log.warn("Список посылок пуст.");
             return Collections.emptyList();
         }
@@ -48,29 +48,29 @@ public class BoxesLoaderService {
         }
 
         log.info("Начало загрузки посылок. Количество посылок: {} шт., Количество грузовиков: {} шт.",
-                boxDtos.size(), trucks.size());
+                boxes.size(), trucks.size());
 
-        boxDtos.sort((box1, box2) -> Integer.compare(box2.getOccupiedSpace(), box1.getOccupiedSpace()));
+        boxes.sort((box1, box2) -> Integer.compare(box2.getOccupiedSpace(), box1.getOccupiedSpace()));
 
         log.debug("Посылки отсортированы по убыванию размера.");
 
-        int countLoadedBoxes = loadFunction.applyAsInt(boxDtos, trucks);
+        int countLoadedBoxes = loadFunction.applyAsInt(boxes, trucks);
 
-        if (countLoadedBoxes != boxDtos.size()) {
+        if (countLoadedBoxes != boxes.size()) {
             throw new BoxLoaderException("Ошибка распределения посылок. Количество посылок, которые не поместились: %d"
-                    .formatted((boxDtos.size() - countLoadedBoxes)));
+                    .formatted((boxes.size() - countLoadedBoxes)));
         }
 
         log.info("Загрузка успешно завершена.");
         return trucks;
     }
 
-    private int loadQuality(List<BoxDto> boxDtos, List<Truck> trucks) {
+    private int loadQuality(List<BoxDto> boxes, List<Truck> trucks) {
         log.info("Использование алгоритма качественной погрузки посылок.");
 
         int countLoadedBoxes = 0;
 
-        for (BoxDto boxDto : boxDtos) {
+        for (BoxDto boxDto : boxes) {
             log.info("Попытка загрузки посылки с размерами: Высота = {}, Длина = {}", boxDto.getHeight(), boxDto.getLength());
             boolean isLoad;
             for (Truck truck : trucks) {
@@ -86,11 +86,11 @@ public class BoxesLoaderService {
         return countLoadedBoxes;
     }
 
-    private int loadUniform(List<BoxDto> boxDtos, List<Truck> trucks) {
+    private int loadUniform(List<BoxDto> boxes, List<Truck> trucks) {
         log.info("Использование алгоритма равномерной погрузки посылок.");
         int countLoadedBoxes = 0;
 
-        for (BoxDto boxDto : boxDtos) {
+        for (BoxDto boxDto : boxes) {
             Truck truck = placementFinder.findTruckWithMinLoadCapacity(trucks);
             int currentLoadCapacity = truck.getLoadCapacity();
             if (loadToTruck(boxDto, truck)) {
@@ -109,11 +109,11 @@ public class BoxesLoaderService {
         int boxLength = boxDto.getLength();
 
         log.debug("Проверка размеров посылки и кузова грузовика: Посылка ({}x{}), Кузов ({}x{})",
-                boxHeight, boxLength, truckBody.size(), truckBody.get(0).size());
+                boxHeight, boxLength, truckBody.size(), truckBody.getFirst().size());
 
-        if (boxHeight > truckBody.size() || boxLength > truckBody.get(0).size()) {
+        if (boxHeight > truckBody.size() || boxLength > truckBody.getFirst().size()) {
             log.error("Размер посылки превышают размер кузова. Посылка: H={}, L={}, Кузов: H={}, L={}",
-                    boxHeight, boxLength, truckBody.size(), truckBody.get(0).size());
+                    boxHeight, boxLength, truckBody.size(), truckBody.getFirst().size());
             throw new OversizeBoxException("Габариты посылки не могут превышать размеры кузова.");
         }
 

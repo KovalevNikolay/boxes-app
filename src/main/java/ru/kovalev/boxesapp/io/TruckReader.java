@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class TruckInputOutput {
+public class TruckReader {
     public List<Truck> read(Path path) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {

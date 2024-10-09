@@ -46,7 +46,7 @@ public class BoxDto {
      */
     @JsonIgnore
     public int getLength() {
-        return body.get(0).size();
+        return body.getFirst().size();
     }
 
     /**

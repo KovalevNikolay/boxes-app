@@ -11,5 +11,7 @@ public interface BoxesRepository extends JpaRepository<Box, Long> {
 
     Optional<Box> findByMarker(String marker);
 
-    void deleteByName(String name);
+    boolean deleteByName(String name);
+
+    boolean existsByName(String name);
 }

@@ -5,6 +5,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.kovalev.boxesapp.dto.BoxDto;
+import ru.kovalev.boxesapp.printer.TruckListPrinter;
 import ru.kovalev.boxesapp.service.BoxesService;
 import ru.kovalev.boxesapp.service.TruckLoadAnalyzer;
 
@@ -17,6 +18,7 @@ public class ShellController {
     private final BoxesService boxesService;
     private final BoxesLoadController boxesLoadController;
     private final TruckLoadAnalyzer truckLoadAnalyzer;
+    private final TruckListPrinter truckListPrinter;
 
     @ShellMethod("посмотреть все посылки")
     public String boxes() {
@@ -42,9 +44,8 @@ public class ShellController {
                          @ShellOption(value = "--body") String body,
                          @ShellOption(value = "--marker") String marker
     ) {
-        return boxesService.add(name, body, marker) == null
-                ? String.format("Посылка с именем '%s' уже существует.", name)
-                : String.format("Посылка '%s' добавлена.", name);
+        boxesService.add(name, body, marker);
+        return String.format("Посылка '%s' добавлена.", name);
     }
 
     @ShellMethod("обновить посылку")
@@ -52,9 +53,9 @@ public class ShellController {
                             @ShellOption(value = "--body") String body,
                             @ShellOption(value = "--marker") String marker
     ) {
-        return boxesService.update(name, body, marker) == null
-                ? String.format("Посылки с именем '%s' не найдено.", name)
-                : String.format("Посылка '%s' успешно обновлена.", name);
+        return boxesService.update(name, body, marker)
+                ? String.format("Посылка '%s' обновлена.", name)
+                : String.format("Посылки '%s' не существует.", name);
     }
 
     @ShellMethod("погрузить посылки")
@@ -62,7 +63,7 @@ public class ShellController {
                             @ShellOption(value = "--trucks", defaultValue = "6x6,6x6,6x6") String trucks,
                             @ShellOption(value = "--strategy", defaultValue = "UNIFORM") String strategy
     ) {
-        return boxesLoadController.loadBoxes(boxes, trucks, strategy);
+        return truckListPrinter.print(boxesLoadController.loadBoxes(boxes, trucks, strategy));
     }
 
     @ShellMethod("погрузить посылки из файла")
@@ -71,7 +72,7 @@ public class ShellController {
                                     @ShellOption(value = "--strategy", defaultValue = "UNIFORM") String strategy
 
     ) {
-        return boxesLoadController.loadBoxesFromFile(boxesPath, trucks, strategy);
+        return truckListPrinter.print(boxesLoadController.loadBoxesFromFile(boxesPath, trucks, strategy));
     }
 
     public String truckAnalyze(@ShellOption(value = "--path") String path) {

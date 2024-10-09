@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.kovalev.boxesapp.dto.BoxDto;
 import ru.kovalev.boxesapp.dto.Truck;
-import ru.kovalev.boxesapp.io.TruckInputOutput;
+import ru.kovalev.boxesapp.io.TruckReader;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -19,10 +19,10 @@ import java.util.Optional;
 public class TruckLoadAnalyzer {
 
     private final BoxesService boxesService;
-    private final TruckInputOutput truckInputOutput;
+    private final TruckReader truckReader;
 
     public String getAnalyze(String path) {
-        List<Truck> trucks = truckInputOutput.read(Path.of(path));
+        List<Truck> trucks = truckReader.read(Path.of(path));
         StringBuilder result = new StringBuilder();
         for (Truck truck : trucks) {
             Map<BoxDto, Integer> analyzeResult = analyze(truck);
@@ -51,7 +51,7 @@ public class TruckLoadAnalyzer {
      */
     private Map<BoxDto, Integer> analyze(Truck truck) {
         log.info("Начат анализ загруженности грузовика с параметрами: Высота = {}, Длина = {}",
-                truck.getBody().size(), truck.getBody().get(0).size());
+                truck.getBody().size(), truck.getBody().getFirst().size());
 
         List<List<String>> body = truck.getBody();
         Map<BoxDto, Integer> boxes = new HashMap<>();

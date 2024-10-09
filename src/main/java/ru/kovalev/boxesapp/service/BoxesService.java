@@ -28,16 +28,20 @@ public class BoxesService {
                 .map(boxesMapper::mapFrom);
     }
 
-    public void delete(String name) {
-        boxesRepository.deleteByName(name);
+    public boolean delete(String name) {
+        return boxesRepository.deleteByName(name);
     }
 
     public BoxDto add(String name, String body, String marker) {
         return boxesMapper.mapFrom(boxesRepository.save(new Box(null, name, body, marker)));
     }
 
-    public BoxDto update(String name, String body, String marker) {
-        return add(name, body, marker);
+    public boolean update(String name, String body, String marker) {
+        if (boxesRepository.existsByName(name)) {
+            add(name, body, marker);
+            return true;
+        }
+        return false;
     }
 
     public Optional<BoxDto> findByMarker(String marker) {
