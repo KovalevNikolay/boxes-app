@@ -8,9 +8,11 @@ import lombok.Setter;
 
 import java.util.List;
 
-public class BoxDto implements Comparable<BoxDto> {
+public class BoxDto {
+
     @Getter
-    private final String name;
+    @Setter
+    private String name;
     @Getter
     @Setter
     private List<List<String>> body;
@@ -29,7 +31,9 @@ public class BoxDto implements Comparable<BoxDto> {
      * @param body двумерный массив целых чисел, представляющий размеры посылки.
      */
     @JsonCreator
-    public BoxDto(@JsonProperty("name") String name, @JsonProperty("body") List<List<String>> body, @JsonProperty("marker") String marker) {
+    public BoxDto(@JsonProperty("name") String name,
+                  @JsonProperty("body") List<List<String>> body,
+                  @JsonProperty("marker") String marker) {
         this.name = name;
         this.body = body;
         this.marker = marker;
@@ -38,11 +42,11 @@ public class BoxDto implements Comparable<BoxDto> {
     /**
      * Возвращает длину посылки
      *
-     * @return максимальная длина посылки
+     * @return длина посылки
      */
     @JsonIgnore
     public int getLength() {
-        return body.getFirst().size();
+        return body.get(0).size();
     }
 
     /**
@@ -99,25 +103,12 @@ public class BoxDto implements Comparable<BoxDto> {
         }
         bodyBuilder.setLength(bodyBuilder.length() - 1);
 
-        return """
+        return String.format("""
                 name: %s
                 body:
                 %s
                 marker: '%s'
                                 
-                """.formatted(name, bodyBuilder.toString(), marker);
-    }
-
-    /**
-     * Сравнивает две посылки по их площади
-     *
-     * @param boxDto другая посылка
-     * @return отрицательное значение, если текущая посылка меньше
-     * положительное значение, если текущая посылка больше
-     * ноль, если маркеры посылок равны
-     */
-    @Override
-    public int compareTo(BoxDto boxDto) {
-        return Integer.compare(getOccupiedSpace(), boxDto.getOccupiedSpace());
+                """, name, bodyBuilder, marker);
     }
 }

@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS project.boxes
+(
+    id     SERIAL PRIMARY KEY,
+    name   VARCHAR(128) NOT NULL UNIQUE,
+    body   VARCHAR(256) NOT NULL,
+    marker VARCHAR(1)   NOT NULL UNIQUE
+);

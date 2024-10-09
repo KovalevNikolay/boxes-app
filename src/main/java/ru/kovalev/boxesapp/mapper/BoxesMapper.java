@@ -13,12 +13,13 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class BoxesMapper {
+
     private final BoxesRepository boxesRepository;
     private final MatrixMapper matrixMapper;
 
     public List<BoxDto> mapToList(String boxNames) {
         return Arrays.stream(boxNames.split(","))
-                .map(boxesRepository::findById)
+                .map(boxesRepository::findByName)
                 .flatMap(Optional::stream)
                 .map(this::mapFrom)
                 .toList();

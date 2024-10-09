@@ -26,11 +26,11 @@ public class BoxesInputOutput {
         }
     }
 
-    public void write(List<BoxDto> boxDtos, Path path) {
+    public void write(List<BoxDto> boxes, Path path) {
         try {
-            new ObjectMapper().writeValue(new File(path.toUri()), boxDtos);
+            new ObjectMapper().writeValue(new File(path.toUri()), boxes);
         } catch (IOException e) {
-            log.error("Произошла ошибка при чтении файла: {}", path, e);
+            log.error("Произошла ошибка при записи файла: {}", path, e);
             throw new FileWritingException("Произошла ошибка при записи посылок в файл. ", e);
         }
     }

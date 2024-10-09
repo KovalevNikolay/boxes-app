@@ -9,7 +9,7 @@ import ru.kovalev.boxesapp.dto.BoxDto;
 import ru.kovalev.boxesapp.dto.LoaderStrategy;
 import ru.kovalev.boxesapp.dto.Truck;
 import ru.kovalev.boxesapp.printer.TruckListPrinter;
-import ru.kovalev.boxesapp.service.BoxesLoader;
+import ru.kovalev.boxesapp.service.BoxesLoaderService;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -17,7 +17,8 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class BoxesLoadController {
-    private final BoxesLoader boxesLoader;
+
+    private final BoxesLoaderService boxesLoaderService;
     private final BoxesMapper boxesMapper;
     private final TrucksMapper trucksMapper;
     private final BoxesInputOutput boxesInputOutput;
@@ -36,6 +37,6 @@ public class BoxesLoadController {
     private List<Truck> load(List<BoxDto> boxDtos, String trucks, String strategy) {
         List<Truck> truckList = trucksMapper.mapToList(trucks);
         LoaderStrategy loaderStrategy = LoaderStrategy.valueOf(strategy);
-        return boxesLoader.load(boxDtos, truckList, loaderStrategy);
+        return boxesLoaderService.load(boxDtos, truckList, loaderStrategy);
     }
 }

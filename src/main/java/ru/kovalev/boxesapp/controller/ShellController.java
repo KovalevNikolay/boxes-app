@@ -29,7 +29,7 @@ public class ShellController {
     public String box(@ShellOption(value = "--name") String name) {
         return boxesService.getByName(name)
                 .map(BoxDto::toString)
-                .orElse("Посылка с именем '%s' не найдена.".formatted(name));
+                .orElse(String.format("Посылка с именем '%s' не найдена.", name));
     }
 
     @ShellMethod("удалить посылку")
@@ -43,8 +43,8 @@ public class ShellController {
                          @ShellOption(value = "--marker") String marker
     ) {
         return boxesService.add(name, body, marker) == null
-                ? "Посылка с именем '%s' уже существует.".formatted(name)
-                : "Посылка '%s' добавлена.".formatted(name);
+                ? String.format("Посылка с именем '%s' уже существует.", name)
+                : String.format("Посылка '%s' добавлена.", name);
     }
 
     @ShellMethod("обновить посылку")
@@ -52,9 +52,9 @@ public class ShellController {
                             @ShellOption(value = "--body") String body,
                             @ShellOption(value = "--marker") String marker
     ) {
-        return boxesService.update(name, body, marker)
-                ? "Посылки с именем '%s' не найдено.".formatted(name)
-                : "Посылка '%s' успешно обновлена.".formatted(name);
+        return boxesService.update(name, body, marker) == null
+                ? String.format("Посылки с именем '%s' не найдено.", name)
+                : String.format("Посылка '%s' успешно обновлена.", name);
     }
 
     @ShellMethod("погрузить посылки")

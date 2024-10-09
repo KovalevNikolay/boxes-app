@@ -3,20 +3,19 @@ package ru.kovalev.boxesapp.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import ru.kovalev.boxesapp.exception.BoxLoaderException;
-import ru.kovalev.boxesapp.exception.OversizeBoxException;
 import ru.kovalev.boxesapp.dto.BoxDto;
 import ru.kovalev.boxesapp.dto.LoaderStrategy;
 import ru.kovalev.boxesapp.dto.Truck;
+import ru.kovalev.boxesapp.exception.BoxLoaderException;
+import ru.kovalev.boxesapp.exception.OversizeBoxException;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.ToIntBiFunction;
 
 @Slf4j
 @Service
-public class BoxesLoader {
+public class BoxesLoaderService {
     private final BoxPlacementFinder placementFinder;
 
     /**
@@ -24,7 +23,7 @@ public class BoxesLoader {
      *
      * @param placementFinder объект, используемый для нахождения места для посылки в грузовике
      */
-    public BoxesLoader(BoxPlacementFinder placementFinder) {
+    public BoxesLoaderService(BoxPlacementFinder placementFinder) {
         this.placementFinder = placementFinder;
     }
 
@@ -51,14 +50,15 @@ public class BoxesLoader {
         log.info("Начало загрузки посылок. Количество посылок: {} шт., Количество грузовиков: {} шт.",
                 boxDtos.size(), trucks.size());
 
-        boxDtos.sort(Comparator.reverseOrder());
+        boxDtos.sort((box1, box2) -> Integer.compare(box2.getOccupiedSpace(), box1.getOccupiedSpace()));
+
         log.debug("Посылки отсортированы по убыванию размера.");
 
         int countLoadedBoxes = loadFunction.applyAsInt(boxDtos, trucks);
 
         if (countLoadedBoxes != boxDtos.size()) {
             throw new BoxLoaderException("Ошибка распределения посылок. Количество посылок, которые не поместились: %d"
-                                                 .formatted((boxDtos.size() - countLoadedBoxes)));
+                    .formatted((boxDtos.size() - countLoadedBoxes)));
         }
 
         log.info("Загрузка успешно завершена.");
@@ -109,11 +109,11 @@ public class BoxesLoader {
         int boxLength = boxDto.getLength();
 
         log.debug("Проверка размеров посылки и кузова грузовика: Посылка ({}x{}), Кузов ({}x{})",
-                boxHeight, boxLength, truckBody.size(), truckBody.getFirst().size());
+                boxHeight, boxLength, truckBody.size(), truckBody.get(0).size());
 
-        if (boxHeight > truckBody.size() || boxLength > truckBody.getFirst().size()) {
+        if (boxHeight > truckBody.size() || boxLength > truckBody.get(0).size()) {
             log.error("Размер посылки превышают размер кузова. Посылка: H={}, L={}, Кузов: H={}, L={}",
-                    boxHeight, boxLength, truckBody.size(), truckBody.getFirst().size());
+                    boxHeight, boxLength, truckBody.size(), truckBody.get(0).size());
             throw new OversizeBoxException("Габариты посылки не могут превышать размеры кузова.");
         }
 
@@ -133,7 +133,7 @@ public class BoxesLoader {
         log.debug("Процесс загрузки посылки с маркером {} в грузовик.", marker);
         for (int i = boxBody.size() - 1; i >= 0; i--) {
             for (int j = 0; j < boxBody.get(i).size(); j++) {
-                truckBody.get(vertical).set(left+j, marker);
+                truckBody.get(vertical).set(left + j, marker);
             }
             vertical--;
         }

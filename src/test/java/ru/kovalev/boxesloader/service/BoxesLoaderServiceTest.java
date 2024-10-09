@@ -6,18 +6,18 @@ import org.mockito.MockitoAnnotations;
 import ru.kovalev.boxesapp.dto.BoxDto;
 import ru.kovalev.boxesapp.dto.LoaderStrategy;
 import ru.kovalev.boxesapp.dto.Truck;
-import ru.kovalev.boxesapp.service.BoxesLoader;
+import ru.kovalev.boxesapp.service.BoxesLoaderService;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoxesLoaderTest {
+class BoxesLoaderServiceTest {
 
     @InjectMocks
-    private BoxesLoader boxesLoader;
+    private BoxesLoaderService boxesLoader;
 
-    BoxesLoaderTest() {
+    BoxesLoaderServiceTest() {
         MockitoAnnotations.openMocks(this);
     }
 

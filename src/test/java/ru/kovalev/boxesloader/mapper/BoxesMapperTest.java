@@ -41,11 +41,14 @@ class BoxesMapperTest {
     @Test
     void whenStringContainsBoxNamesThenListSizeEqualCountNamesInString() {
 
+        Box box1 = new Box(null, "штанга", "@,@", "@");
+        Box box2 = new Box(null, "комп", "#,#", "#");
+
         when(matrixMapper.mapToString(any())).thenReturn("");
         when(matrixMapper.mapToMatrix(any())).thenReturn(null);
 
-        when(boxesRepository.findById("штанга")).thenReturn(Optional.of(new Box("штанга", null, "")));
-        when(boxesRepository.findById("комп")).thenReturn(Optional.of(new Box("комп", null, "")));
+        when(boxesRepository.findByName("штанга")).thenReturn(Optional.of(box1));
+        when(boxesRepository.findByName("комп")).thenReturn(Optional.of(box2));
 
         String input = "штанга,комп";
         List<BoxDto> boxes = boxesMapper.mapToList(input);

@@ -24,20 +24,20 @@ public class BoxesService {
     }
 
     public Optional<BoxDto> getByName(String name) {
-        return boxesRepository.findById(name)
+        return boxesRepository.findByName(name)
                 .map(boxesMapper::mapFrom);
     }
 
     public void delete(String name) {
-        boxesRepository.deleteById(name);
+        boxesRepository.deleteByName(name);
     }
 
     public BoxDto add(String name, String body, String marker) {
-        return boxesMapper.mapFrom(boxesRepository.save(new Box(name, body, marker)));
+        return boxesMapper.mapFrom(boxesRepository.save(new Box(null, name, body, marker)));
     }
 
-    public boolean update(String name, String body, String marker) {
-        return boxesRepository.update(new Box(name, body, marker));
+    public BoxDto update(String name, String body, String marker) {
+        return add(name, body, marker);
     }
 
     public Optional<BoxDto> findByMarker(String marker) {

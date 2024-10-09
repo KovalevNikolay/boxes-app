@@ -51,7 +51,7 @@ public class TruckLoadAnalyzer {
      */
     private Map<BoxDto, Integer> analyze(Truck truck) {
         log.info("Начат анализ загруженности грузовика с параметрами: Высота = {}, Длина = {}",
-                truck.getBody().size(), truck.getBody().getFirst().size());
+                truck.getBody().size(), truck.getBody().get(0).size());
 
         List<List<String>> body = truck.getBody();
         Map<BoxDto, Integer> boxes = new HashMap<>();

@@ -1,6 +1,5 @@
 package ru.kovalev.boxesapp.mapper;
 
-import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.stream.Collectors;
 @Service
 public class MatrixMapper {
     public List<List<String>> mapToMatrix(String input) {
-        if (StringUtils.isBlank(input)) {
+        if (input == null || input.isEmpty()) {
             return Collections.emptyList();
         }
 

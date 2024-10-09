@@ -1,4 +1,9 @@
 spring:
-  shell:
-    interactive:
-      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/boxes_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    default-schema: project
