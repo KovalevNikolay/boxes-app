@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.kovalev.boxesapp.dto.BoxDto;
 import ru.kovalev.boxesapp.entity.Box;
 import ru.kovalev.boxesapp.mapper.BoxesMapper;
+import ru.kovalev.boxesapp.mapper.MatrixMapper;
 import ru.kovalev.boxesapp.repository.BoxesRepository;
 
 import javax.transaction.Transactional;
@@ -17,6 +18,7 @@ public class BoxesService {
 
     private final BoxesRepository boxesRepository;
     private final BoxesMapper boxesMapper;
+    private final MatrixMapper matrixMapper;
 
     public List<BoxDto> getAll() {
         return boxesRepository.findAll().stream()
@@ -40,11 +42,10 @@ public class BoxesService {
 
     @Transactional
     public boolean update(BoxDto boxDto) {
-        Box mapped = boxesMapper.mapFrom(boxDto);
-        Box box = boxesRepository.findByName(mapped.getName()).orElse(null);
+        Box box = boxesRepository.findByName(boxDto.getName()).orElse(null);
         if (box != null) {
-            box.setBody(mapped.getBody());
-            box.setMarker(mapped.getMarker());
+            box.setBody(matrixMapper.mapToString(boxDto.getBody()));
+            box.setMarker(boxDto.getMarker());
             boxesRepository.save(box);
             return true;
         }

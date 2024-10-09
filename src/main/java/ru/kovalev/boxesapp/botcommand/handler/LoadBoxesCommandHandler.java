@@ -11,7 +11,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LoadBoxesCommandHandler implements CommandHandler {
 
-    private static final int BOX_NAMES_INDEX = 0;
     private static final int TRUCKS_INDEX = 1;
     private static final int LOAD_STRATEGY_INDEX = 2;
 
@@ -23,7 +22,7 @@ public class LoadBoxesCommandHandler implements CommandHandler {
     public void handle(Update update) {
         String text = update.getMessage().getText();
         List<String> parameters = messageParser.parseParameters(text);
-        String boxes = parameters.get(BOX_NAMES_INDEX);
+        String boxes = parameters.getFirst();
         String trucks = parameters.get(TRUCKS_INDEX);
         String strategy = parameters.get(LOAD_STRATEGY_INDEX);
         Long chatId = update.getMessage().getChatId();

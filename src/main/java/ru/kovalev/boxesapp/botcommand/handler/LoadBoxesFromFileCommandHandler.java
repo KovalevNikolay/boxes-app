@@ -39,7 +39,7 @@ public class LoadBoxesFromFileCommandHandler implements CommandHandler {
         }
 
         Path path = telegramFileDownloader.downloadFile(update.getMessage().getDocument());
-        String trucks = parameters.get(TRUCKS_INDEX);
+        String trucks = parameters.getFirst();
         String strategy = parameters.get(LOAD_STRATEGY_INDEX);
         String message = proxyController.loadBoxesFromFile(path.toString(), trucks, strategy);
         messageSender.sendMessage(chatId, message);

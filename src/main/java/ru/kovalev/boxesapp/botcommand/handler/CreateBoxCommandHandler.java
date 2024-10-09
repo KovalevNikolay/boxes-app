@@ -11,7 +11,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CreateBoxCommandHandler implements CommandHandler {
 
-    private static final int BOX_NAME_INDEX = 0;
     private static final int BOX_BODY_INDEX = 1;
     private static final int BOX_BODY_MARKER_INDEX = 2;
 
@@ -23,7 +22,7 @@ public class CreateBoxCommandHandler implements CommandHandler {
     public void handle(Update update) {
         String text = update.getMessage().getText();
         List<String> parameters = messageParser.parseParameters(text);
-        String name = parameters.get(BOX_NAME_INDEX);
+        String name = parameters.getFirst();
         String body = parameters.get(BOX_BODY_INDEX);
         String marker = parameters.get(BOX_BODY_MARKER_INDEX);
         Long chatId = update.getMessage().getChatId();
