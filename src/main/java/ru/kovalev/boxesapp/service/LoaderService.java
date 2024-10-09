@@ -15,7 +15,7 @@ import java.util.function.ToIntBiFunction;
 
 @Slf4j
 @Service
-public class BoxesLoaderService {
+public class LoaderService {
     private final BoxPlacementFinder placementFinder;
 
     /**
@@ -23,7 +23,7 @@ public class BoxesLoaderService {
      *
      * @param placementFinder объект, используемый для нахождения места для посылки в грузовике
      */
-    public BoxesLoaderService(BoxPlacementFinder placementFinder) {
+    public LoaderService(BoxPlacementFinder placementFinder) {
         this.placementFinder = placementFinder;
     }
 
