@@ -7,3 +7,7 @@ spring:
   flyway:
     enabled: true
     default-schema: project
+
+telegram:
+  bot:
+    username: BoxesAppKovalevBot
