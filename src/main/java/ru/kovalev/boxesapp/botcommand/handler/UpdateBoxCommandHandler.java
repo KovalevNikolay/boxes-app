@@ -3,7 +3,7 @@ package ru.kovalev.boxesapp.botcommand.handler;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kovalev.boxesapp.botcommand.parser.MessageParser;
-import ru.kovalev.boxesapp.service.BoxesService;
+import ru.kovalev.boxesapp.controller.ProxyController;
 import ru.kovalev.boxesapp.service.TelegramMessageSender;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class UpdateBoxCommandHandler implements CommandHandler {
     private static final int BOX_BODY_INDEX = 1;
     private static final int BOX_BODY_MARKER_INDEX = 2;
 
-    private final BoxesService boxesService;
+    private final ProxyController proxyController;
     private final TelegramMessageSender messageSender;
     private final MessageParser messageParser;
 
@@ -25,10 +25,7 @@ public class UpdateBoxCommandHandler implements CommandHandler {
         String name = parameters.get(BOX_NAME_INDEX);
         String body = parameters.get(BOX_BODY_INDEX);
         String marker = parameters.get(BOX_BODY_MARKER_INDEX);
-        String message = boxesService.update(name, body, marker)
-                ? String.format("Посылка '%s' обновлена.", name)
-                : String.format("Посылки '%s' не существует.", name);
-
+        String message = proxyController.updateBox(name, body, marker);
         Long chatId = update.getMessage().getChatId();
         messageSender.sendMessage(chatId, message);
     }

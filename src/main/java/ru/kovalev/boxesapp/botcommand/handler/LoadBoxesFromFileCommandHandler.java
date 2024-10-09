@@ -1,12 +1,10 @@
 package ru.kovalev.boxesapp.botcommand.handler;
 
 import lombok.RequiredArgsConstructor;
-import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kovalev.boxesapp.botcommand.parser.MessageParser;
-import ru.kovalev.boxesapp.controller.BoxesLoadController;
+import ru.kovalev.boxesapp.controller.ProxyController;
 import ru.kovalev.boxesapp.io.TelegramFileDownloader;
-import ru.kovalev.boxesapp.printer.TruckListPrinter;
 import ru.kovalev.boxesapp.service.TelegramMessageSender;
 
 import java.nio.file.Path;
@@ -19,11 +17,10 @@ public class LoadBoxesFromFileCommandHandler implements CommandHandler {
     private static final int LOAD_STRATEGY_INDEX = 1;
     private static final int NEEDED_COUNT_PARAMETERS = 2;
 
-    private final TelegramFileDownloader telegramFileDownloader;
-    private final BoxesLoadController boxesLoadController;
+    private final ProxyController proxyController;
     private final TelegramMessageSender messageSender;
     private final MessageParser messageParser;
-    private final TruckListPrinter truckListPrinter;
+    private final TelegramFileDownloader telegramFileDownloader;
 
 
     @Override
@@ -41,11 +38,10 @@ public class LoadBoxesFromFileCommandHandler implements CommandHandler {
             return;
         }
 
-        Document document = update.getMessage().getDocument();
-        Path path = telegramFileDownloader.downloadFile(document);
+        Path path = telegramFileDownloader.downloadFile(update.getMessage().getDocument());
         String trucks = parameters.get(TRUCKS_INDEX);
         String strategy = parameters.get(LOAD_STRATEGY_INDEX);
-        String message = truckListPrinter.print(boxesLoadController.loadBoxesFromFile(path.toString(), trucks, strategy));
+        String message = proxyController.loadBoxesFromFile(path.toString(), trucks, strategy);
         messageSender.sendMessage(chatId, message);
     }
 }

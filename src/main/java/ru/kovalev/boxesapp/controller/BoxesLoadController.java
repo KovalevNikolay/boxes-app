@@ -8,7 +8,7 @@ import ru.kovalev.boxesapp.dto.Truck;
 import ru.kovalev.boxesapp.io.BoxesReader;
 import ru.kovalev.boxesapp.mapper.BoxesMapper;
 import ru.kovalev.boxesapp.mapper.TrucksMapper;
-import ru.kovalev.boxesapp.service.BoxesLoaderService;
+import ru.kovalev.boxesapp.service.LoaderService;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoxesLoadController {
 
-    private final BoxesLoaderService boxesLoaderService;
+    private final LoaderService loaderService;
     private final BoxesMapper boxesMapper;
     private final TrucksMapper trucksMapper;
     private final BoxesReader boxesReader;
@@ -27,14 +27,14 @@ public class BoxesLoadController {
         return load(boxesList, trucks, strategy);
     }
 
-    public List<Truck> loadBoxesFromFile(String boxesPath, String trucks, String strategy) {
-        List<BoxDto> boxesList = boxesReader.read(Path.of(boxesPath));
+    public List<Truck> loadBoxesFromFile(String boxes, String trucks, String strategy) {
+        List<BoxDto> boxesList = boxesReader.read(Path.of(boxes));
         return load(boxesList, trucks, strategy);
     }
 
-    private List<Truck> load(List<BoxDto> boxDtos, String trucks, String strategy) {
+    private List<Truck> load(List<BoxDto> boxes, String trucks, String strategy) {
         List<Truck> truckList = trucksMapper.mapToList(trucks);
         LoaderStrategy loaderStrategy = LoaderStrategy.valueOf(strategy);
-        return boxesLoaderService.load(boxDtos, truckList, loaderStrategy);
+        return loaderService.load(boxes, truckList, loaderStrategy);
     }
 }

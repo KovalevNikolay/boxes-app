@@ -3,8 +3,7 @@ package ru.kovalev.boxesapp.botcommand.handler;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kovalev.boxesapp.botcommand.parser.MessageParser;
-import ru.kovalev.boxesapp.controller.BoxesLoadController;
-import ru.kovalev.boxesapp.printer.TruckListPrinter;
+import ru.kovalev.boxesapp.controller.ProxyController;
 import ru.kovalev.boxesapp.service.TelegramMessageSender;
 
 import java.util.List;
@@ -16,11 +15,9 @@ public class LoadBoxesCommandHandler implements CommandHandler {
     private static final int TRUCKS_INDEX = 1;
     private static final int LOAD_STRATEGY_INDEX = 2;
 
-    private final BoxesLoadController boxesLoadController;
+    private final ProxyController proxyController;
     private final TelegramMessageSender messageSender;
     private final MessageParser messageParser;
-    private final TruckListPrinter truckListPrinter;
-
 
     @Override
     public void handle(Update update) {
@@ -29,9 +26,8 @@ public class LoadBoxesCommandHandler implements CommandHandler {
         String boxes = parameters.get(BOX_NAMES_INDEX);
         String trucks = parameters.get(TRUCKS_INDEX);
         String strategy = parameters.get(LOAD_STRATEGY_INDEX);
-
         Long chatId = update.getMessage().getChatId();
-        String message = truckListPrinter.print(boxesLoadController.loadBoxes(boxes, trucks, strategy));
+        String message = proxyController.loadBoxes(boxes, trucks, strategy);
         messageSender.sendMessage(chatId, message);
     }
 }

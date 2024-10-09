@@ -1,0 +1,26 @@
+package ru.kovalev.boxesapp.dto;
+
+import java.util.Map;
+
+public class AnalyzeResult {
+    private final Map<BoxDto, Integer> result;
+    private final Truck truck;
+
+    public AnalyzeResult(Map<BoxDto, Integer> result, Truck truck) {
+        this.result = result;
+        this.truck = truck;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder resultAnalyze = new StringBuilder();
+        resultAnalyze.append("Грузовик:\n").append(truck).append("Посылки:\n");
+        for (Map.Entry<BoxDto, Integer> box : result.entrySet()) {
+            resultAnalyze.append(box.getKey().getName())
+                    .append(" - ")
+                    .append(box.getValue())
+                    .append(" шт.");
+        }
+        return resultAnalyze.append("\n").toString();
+    }
+}

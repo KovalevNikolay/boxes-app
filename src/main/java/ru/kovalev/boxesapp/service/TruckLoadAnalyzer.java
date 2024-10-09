@@ -3,11 +3,14 @@ package ru.kovalev.boxesapp.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.kovalev.boxesapp.dto.AnalyzeResult;
 import ru.kovalev.boxesapp.dto.BoxDto;
 import ru.kovalev.boxesapp.dto.Truck;
 import ru.kovalev.boxesapp.io.TruckReader;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,26 +24,17 @@ public class TruckLoadAnalyzer {
     private final BoxesService boxesService;
     private final TruckReader truckReader;
 
-    public String getAnalyze(String path) {
-        List<Truck> trucks = truckReader.read(Path.of(path));
-        StringBuilder result = new StringBuilder();
-        for (Truck truck : trucks) {
-            Map<BoxDto, Integer> analyzeResult = analyze(truck);
-            result.append(toString(truck, analyzeResult));
+    public List<AnalyzeResult> analyze(Path path) {
+        List<Truck> trucks = truckReader.read(path);
+        if (trucks.isEmpty()) {
+            return Collections.emptyList();
         }
-        return result.toString();
-    }
 
-    private String toString(Truck truck, Map<BoxDto, Integer> boxesInTruck) {
-        StringBuilder resultAnalyze = new StringBuilder();
-        resultAnalyze.append("Грузовик:\n").append(truck).append("Посылки:\n");
-        for (Map.Entry<BoxDto, Integer> box : boxesInTruck.entrySet()) {
-            resultAnalyze.append(box.getKey().getName())
-                    .append(" - ")
-                    .append(box.getValue())
-                    .append(" шт.");
+        List<AnalyzeResult> analyzeResults = new ArrayList<>();
+        for (Truck truck : trucks) {
+            analyzeResults.add(analyze(truck));
         }
-        return resultAnalyze.append("\n").toString();
+        return analyzeResults;
     }
 
     /**
@@ -49,12 +43,12 @@ public class TruckLoadAnalyzer {
      * @param truck грузовик, загруженность которого необходимо проанализировать
      * @return map, где ключ - тип посылки, значение - количество посылок данного типа
      */
-    private Map<BoxDto, Integer> analyze(Truck truck) {
+    private AnalyzeResult analyze(Truck truck) {
         log.info("Начат анализ загруженности грузовика с параметрами: Высота = {}, Длина = {}",
                 truck.getBody().size(), truck.getBody().getFirst().size());
 
         List<List<String>> body = truck.getBody();
-        Map<BoxDto, Integer> boxes = new HashMap<>();
+        Map<BoxDto, Integer> analyzeResult = new HashMap<>();
 
         log.debug("Анализ содержимого кузова грузовика.");
 
@@ -63,7 +57,7 @@ public class TruckLoadAnalyzer {
                 if (marker != null) {
                     Optional<BoxDto> boxByMarker = boxesService.findByMarker(marker);
                     boxByMarker.ifPresentOrElse(
-                            box -> updateBoxCount(box, boxes),
+                            box -> updateBoxCount(box, analyzeResult),
                             () -> log.error("Посылка с маркером \"{}\" не найдена.", marker)
                     );
 
@@ -72,10 +66,11 @@ public class TruckLoadAnalyzer {
         }
 
         log.info("Применение коррекции для вычисления количества посылок каждого типа.");
-        boxes.replaceAll((box, allMarkers) -> allMarkers / box.getOccupiedSpace());
+        analyzeResult.replaceAll((box, allMarkers) -> allMarkers / box.getOccupiedSpace());
 
-        log.info("Анализ загруженности грузовика завершен. Общее количество уникальных посылок: {}", boxes.size());
-        return boxes;
+        log.info("Анализ загруженности грузовика завершен. Общее количество уникальных посылок: {}", analyzeResult.size());
+
+        return new AnalyzeResult(analyzeResult, truck);
     }
 
     private void updateBoxCount(BoxDto boxDto, Map<BoxDto, Integer> boxes) {
