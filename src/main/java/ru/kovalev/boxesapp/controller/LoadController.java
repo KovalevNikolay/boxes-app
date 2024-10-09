@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class BoxesLoadController {
+public class LoadController {
 
     private final LoaderService loaderService;
     private final BoxesMapper boxesMapper;

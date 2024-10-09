@@ -34,16 +34,17 @@ public class BoxesService {
         return boxesRepository.deleteByName(name) > 0;
     }
 
-    public BoxDto add(String name, String body, String marker) {
-        return boxesMapper.mapFrom(boxesRepository.save(new Box(null, name, body, marker)));
+    public Box add(BoxDto boxDto) {
+        return boxesRepository.save(boxesMapper.mapFrom(boxDto));
     }
 
     @Transactional
-    public boolean update(String name, String body, String marker) {
-        Box box = boxesRepository.findByName(name).orElse(null);
+    public boolean update(BoxDto boxDto) {
+        Box mapped = boxesMapper.mapFrom(boxDto);
+        Box box = boxesRepository.findByName(mapped.getName()).orElse(null);
         if (box != null) {
-            box.setBody(body);
-            box.setMarker(marker);
+            box.setBody(mapped.getBody());
+            box.setMarker(mapped.getMarker());
             boxesRepository.save(box);
             return true;
         }

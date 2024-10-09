@@ -9,23 +9,23 @@ import java.nio.file.Path;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class ShellController {
+public class BoxesShellController {
 
-    private final ProxyController operationProxy;
+    private final ProxyController proxyController;
 
     @ShellMethod("посмотреть все посылки")
     public String boxes() {
-        return operationProxy.boxes();
+        return proxyController.boxes();
     }
 
     @ShellMethod("посмотреть посылку по названию")
     public String box(@ShellOption(value = "--name") String name) {
-        return operationProxy.box(name);
+        return proxyController.box(name);
     }
 
     @ShellMethod("удалить посылку")
     public String deleteBox(@ShellOption(value = "--name") String name) {
-        return operationProxy.deleteBox(name);
+        return proxyController.deleteBox(name);
     }
 
     @ShellMethod("добавить посылку")
@@ -33,7 +33,7 @@ public class ShellController {
                          @ShellOption(value = "--body") String body,
                          @ShellOption(value = "--marker") String marker
     ) {
-        return operationProxy.addBox(name, body, marker);
+        return proxyController.addBox(name, body, marker);
     }
 
     @ShellMethod("обновить посылку")
@@ -41,7 +41,7 @@ public class ShellController {
                             @ShellOption(value = "--body") String body,
                             @ShellOption(value = "--marker") String marker
     ) {
-        return operationProxy.updateBox(name, body, marker);
+        return proxyController.updateBox(name, body, marker);
     }
 
     @ShellMethod("погрузить посылки")
@@ -49,7 +49,7 @@ public class ShellController {
                             @ShellOption(value = "--trucks") String trucks,
                             @ShellOption(value = "--strategy", defaultValue = "UNIFORM") String strategy
     ) {
-        return operationProxy.loadBoxes(boxes, trucks, strategy);
+        return proxyController.loadBoxes(boxes, trucks, strategy);
     }
 
     @ShellMethod("погрузить посылки из файла")
@@ -58,10 +58,10 @@ public class ShellController {
                                     @ShellOption(value = "--strategy", defaultValue = "UNIFORM") String strategy
 
     ) {
-        return operationProxy.loadBoxesFromFile(path, trucks, strategy);
+        return proxyController.loadBoxesFromFile(path, trucks, strategy);
     }
 
     public String truckAnalyze(@ShellOption(value = "--path") String path) {
-        return operationProxy.truckAnalyze(Path.of(path));
+        return proxyController.truckAnalyze(Path.of(path));
     }
 }
