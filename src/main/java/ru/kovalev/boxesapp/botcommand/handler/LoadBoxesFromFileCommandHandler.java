@@ -13,7 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LoadBoxesFromFileCommandHandler implements CommandHandler {
 
-    private static final int TRUCKS_INDEX = 0;
     private static final int LOAD_STRATEGY_INDEX = 1;
     private static final int NEEDED_COUNT_PARAMETERS = 2;
 
@@ -26,7 +25,7 @@ public class LoadBoxesFromFileCommandHandler implements CommandHandler {
     @Override
     public void handle(Update update) {
         Long chatId = update.getMessage().getChatId();
-        List<String> parameters = messageParser.parseParameters(update.getMessage().getText());
+        List<String> parameters = messageParser.parseParameters(update.getMessage().getCaption());
 
         if (parameters.size() != NEEDED_COUNT_PARAMETERS) {
             messageSender.sendMessage(chatId, "Вы не передали необходимое количество параметров.");

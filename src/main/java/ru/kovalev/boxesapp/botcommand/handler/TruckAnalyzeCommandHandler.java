@@ -19,7 +19,7 @@ public class TruckAnalyzeCommandHandler implements CommandHandler {
     public void handle(Update update) {
         Long chatId = update.getMessage().getChatId();
         if (!update.getMessage().hasDocument()) {
-            messageSender.sendMessage(chatId, "Вы не прикрепили файл с посылками.");
+            messageSender.sendMessage(chatId, "Вы не прикрепили файл с грузовиками.");
             return;
         }
         Path path = telegramFileDownloader.downloadFile(update.getMessage().getDocument());

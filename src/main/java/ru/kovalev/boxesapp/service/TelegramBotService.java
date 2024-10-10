@@ -29,9 +29,13 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
+        if (update.hasMessage() && (update.getMessage().hasText() || update.getMessage().hasDocument())) {
             Message message = update.getMessage();
-            String command = messageParser.parseCommand(message.getText());
+            String messageText = message.getCaption() == null
+                    ? message.getText()
+                    : message.getCaption();
+
+            String command = messageParser.parseCommand(messageText);
             CommandHandler handler = handlerFactory.getHandler(command);
             handler.handle(update);
         }
