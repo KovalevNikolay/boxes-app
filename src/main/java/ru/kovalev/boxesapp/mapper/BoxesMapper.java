@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @RequiredArgsConstructor
 public class BoxesMapper {
@@ -22,8 +24,7 @@ public class BoxesMapper {
                 .map(boxesRepository::findByName)
                 .flatMap(Optional::stream)
                 .map(this::mapFrom)
-                .toList();
-
+                .collect(toList());
     }
 
     public Box mapFrom(BoxDto boxDto) {

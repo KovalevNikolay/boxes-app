@@ -52,7 +52,7 @@ public class ProxyController {
     }
 
     public String loadBoxes(String boxes, String trucks, String strategy) {
-        return loadResultFormatter.format(loadController.loadBoxes(boxes, trucks, strategy));
+        return loadResultFormatter.format(loadController.loadBoxes(boxes, trucks, strategy.toUpperCase()));
     }
 
     public String loadBoxesFromFile(String path, String trucks, String strategy) {

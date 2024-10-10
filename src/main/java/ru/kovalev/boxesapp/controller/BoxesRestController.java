@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kovalev.boxesapp.dto.BoxDto;
+import ru.kovalev.boxesapp.dto.Truck;
 import ru.kovalev.boxesapp.entity.Box;
 import ru.kovalev.boxesapp.service.BoxesService;
 
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class BoxesRestController {
 
     private final BoxesService boxesService;
+    private final LoadController loadController;
 
     @GetMapping
     public ResponseEntity<List<BoxDto>> getAllBoxes() {
@@ -60,4 +63,27 @@ public class BoxesRestController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @GetMapping("/load-boxes")
+    public ResponseEntity<List<Truck>> loadBoxes(
+            @RequestParam String boxes,
+            @RequestParam String trucks,
+            @RequestParam String strategy
+    ) {
+        List<Truck> loadedResult = loadController.loadBoxes(boxes, trucks, strategy);
+        return ResponseEntity.ok(loadedResult);
+    }
+
+//    @GetMapping("/load-boxes-from-json")
+//    public ResponseEntity<List<Truck>> loadBoxes(
+//            @RequestBody List<BoxDto> boxes,
+//            @RequestParam String trucks,
+//            @RequestParam String strategy
+//    ) {
+//        List<Truck> loadedResult = loadController.loadBoxesFromFile(boxes, trucks, strategy);
+//        return ResponseEntity.ok(loadedResult);
+//    }
+
+//    @GetMapping("/truck-analyze")
+//    public ResponseEntity<List<AnalyzeResult>>
 }

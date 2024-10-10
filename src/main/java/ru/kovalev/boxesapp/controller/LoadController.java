@@ -34,7 +34,7 @@ public class LoadController {
 
     private List<Truck> load(List<BoxDto> boxes, String trucks, String strategy) {
         List<Truck> truckList = trucksMapper.mapToList(trucks);
-        LoaderStrategy loaderStrategy = LoaderStrategy.valueOf(strategy);
+        LoaderStrategy loaderStrategy = LoaderStrategy.valueOf(strategy.toUpperCase());
         return loaderService.load(boxes, truckList, loaderStrategy);
     }
 }
