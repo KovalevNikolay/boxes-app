@@ -9,12 +9,13 @@ import ru.kovalev.boxesapp.dto.Truck;
 import ru.kovalev.boxesapp.io.TruckReader;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -24,17 +25,18 @@ public class TruckLoadAnalyzer {
     private final BoxesService boxesService;
     private final TruckReader truckReader;
 
-    public List<AnalyzeResult> analyze(Path path) {
+    public List<AnalyzeResult> analyzeAll(List<Truck> trucks) {
+        return trucks.stream()
+                .map(this::analyze)
+                .collect(toList());
+    }
+
+    public List<AnalyzeResult> analyzeFromFile(Path path) {
         List<Truck> trucks = truckReader.read(path);
         if (trucks.isEmpty()) {
             return Collections.emptyList();
         }
-
-        List<AnalyzeResult> analyzeResults = new ArrayList<>();
-        for (Truck truck : trucks) {
-            analyzeResults.add(analyze(truck));
-        }
-        return analyzeResults;
+        return analyzeAll(trucks);
     }
 
     /**
@@ -54,7 +56,7 @@ public class TruckLoadAnalyzer {
 
         for (List<String> row : body) {
             for (String marker : row) {
-                if (marker != null) {
+                if (!marker.isEmpty()) {
                     Optional<BoxDto> boxByMarker = boxesService.findByMarker(marker);
                     boxByMarker.ifPresentOrElse(
                             box -> updateBoxCount(box, analyzeResult),

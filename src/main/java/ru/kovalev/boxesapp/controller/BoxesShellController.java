@@ -61,6 +61,7 @@ public class BoxesShellController {
         return proxyController.loadBoxesFromFile(path, trucks, strategy);
     }
 
+    @ShellMethod("анализ содержимого кузова грузовика")
     public String truckAnalyze(@ShellOption(value = "--path") String path) {
         return proxyController.truckAnalyze(Path.of(path));
     }

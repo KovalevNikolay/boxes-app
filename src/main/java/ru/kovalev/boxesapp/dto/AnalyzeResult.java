@@ -1,10 +1,13 @@
 package ru.kovalev.boxesapp.dto;
 
+import lombok.Data;
+
 import java.util.Map;
 
+@Data
 public class AnalyzeResult {
-    private final Map<BoxDto, Integer> result;
-    private final Truck truck;
+    private Map<BoxDto, Integer> result;
+    private Truck truck;
 
     public AnalyzeResult(Map<BoxDto, Integer> result, Truck truck) {
         this.result = result;

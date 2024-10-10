@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.kovalev.boxesapp.dto.AnalyzeResult;
 import ru.kovalev.boxesapp.dto.BoxDto;
 import ru.kovalev.boxesapp.dto.Truck;
 import ru.kovalev.boxesapp.entity.Box;
 import ru.kovalev.boxesapp.service.BoxesService;
+import ru.kovalev.boxesapp.service.TruckLoadAnalyzer;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,7 @@ public class BoxesRestController {
 
     private final BoxesService boxesService;
     private final LoadController loadController;
+    private final TruckLoadAnalyzer truckLoadAnalyzer;
 
     @GetMapping
     public ResponseEntity<List<BoxDto>> getAllBoxes() {
@@ -74,16 +77,19 @@ public class BoxesRestController {
         return ResponseEntity.ok(loadedResult);
     }
 
-//    @GetMapping("/load-boxes-from-json")
-//    public ResponseEntity<List<Truck>> loadBoxes(
-//            @RequestBody List<BoxDto> boxes,
-//            @RequestParam String trucks,
-//            @RequestParam String strategy
-//    ) {
-//        List<Truck> loadedResult = loadController.loadBoxesFromFile(boxes, trucks, strategy);
-//        return ResponseEntity.ok(loadedResult);
-//    }
+    @PostMapping("/load-boxes-from-json")
+    public ResponseEntity<List<Truck>> loadBoxesFromJson(
+            @RequestBody List<BoxDto> boxes,
+            @RequestParam String trucks,
+            @RequestParam String strategy
+    ) {
+        List<Truck> loadedResult = loadController.load(boxes, trucks, strategy);
+        return ResponseEntity.ok(loadedResult);
+    }
 
-//    @GetMapping("/truck-analyze")
-//    public ResponseEntity<List<AnalyzeResult>>
+    @PostMapping("/truck-analyze")
+    public ResponseEntity<List<AnalyzeResult>> truckAnalyze(@RequestBody List<Truck> trucks) {
+        List<AnalyzeResult> analyzeResults = truckLoadAnalyzer.analyzeAll(trucks);
+        return ResponseEntity.ok(analyzeResults);
+    }
 }

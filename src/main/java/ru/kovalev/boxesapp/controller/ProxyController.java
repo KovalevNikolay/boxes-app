@@ -60,7 +60,7 @@ public class ProxyController {
     }
 
     public String truckAnalyze(Path path) {
-        return truckLoadAnalyzer.analyze(path).stream()
+        return truckLoadAnalyzer.analyzeFromFile(path).stream()
                 .map(AnalyzeResult::toString)
                 .collect(Collectors.joining());
     }
