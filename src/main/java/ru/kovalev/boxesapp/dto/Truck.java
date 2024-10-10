@@ -67,7 +67,7 @@ public class Truck {
         for (List<String> row : body) {
             stringBuilder.append("+");
             for (String cell : row) {
-                stringBuilder.append(Objects.isNull(cell) ? " " : cell);
+                stringBuilder.append(Objects.isNull(cell) || cell.isEmpty() ? " " : cell);
             }
             stringBuilder.append("+\n");
         }

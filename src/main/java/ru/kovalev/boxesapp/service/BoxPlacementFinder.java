@@ -131,7 +131,7 @@ public class BoxPlacementFinder {
      * @return наименее загруженный грузовик
      */
     public Truck findTruckWithMinLoadCapacity(List<Truck> trucks) {
-        Truck truckWithMinLoadCapacity = trucks.get(0);
+        Truck truckWithMinLoadCapacity = trucks.getFirst();
 
         for (Truck truck : trucks) {
             if (truck.getLoadCapacity() < truckWithMinLoadCapacity.getLoadCapacity()) {

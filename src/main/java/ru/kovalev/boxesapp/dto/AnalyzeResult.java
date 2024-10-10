@@ -17,7 +17,7 @@ public class AnalyzeResult {
     @Override
     public String toString() {
         StringBuilder resultAnalyze = new StringBuilder();
-        resultAnalyze.append("Грузовик:\n").append(truck).append("Посылки:\n");
+        resultAnalyze.append("Грузовик:\n").append(truck).append("\nПосылки:");
         for (Map.Entry<BoxDto, Integer> box : result.entrySet()) {
             resultAnalyze.append(box.getKey().getName())
                     .append(" - ")
