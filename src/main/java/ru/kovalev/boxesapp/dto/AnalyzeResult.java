@@ -22,8 +22,8 @@ public class AnalyzeResult {
             resultAnalyze.append(box.getKey().getName())
                     .append(" - ")
                     .append(box.getValue())
-                    .append(" шт.");
+                    .append(" шт. ");
         }
-        return resultAnalyze.append("\n").toString();
+        return resultAnalyze.append("\n\n").toString();
     }
 }

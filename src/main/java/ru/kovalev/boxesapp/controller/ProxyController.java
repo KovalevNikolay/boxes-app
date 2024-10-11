@@ -31,24 +31,24 @@ public class ProxyController {
     public String box(String name) {
         return boxesService.getByName(name)
                 .map(BoxDto::toString)
-                .orElse(String.format("Посылка с именем '%s' не найдена.", name));
+                .orElse("Посылка с именем '%s' не найдена.".formatted(name));
     }
 
     public String deleteBox(String name) {
         return boxesService.delete(name)
-                ? String.format("Посылка '%s' удалена.", name)
-                : String.format("Посылка '%s' не найдена.", name);
+                ? "Посылка '%s' удалена.".formatted(name)
+                : "Посылка '%s' не найдена.".formatted(name);
     }
 
     public String addBox(String name, String body, String marker) {
         boxesService.add(new BoxDto(name, matrixMapper.mapToMatrix(body), marker));
-        return String.format("Посылка '%s' добавлена.", name);
+        return "Посылка '%s' добавлена.".formatted(name);
     }
 
     public String updateBox(String name, String body, String marker) {
         return boxesService.update(new BoxDto(name, matrixMapper.mapToMatrix(body), marker))
-                ? String.format("Посылка '%s' обновлена.", name)
-                : String.format("Посылки '%s' не существует.", name);
+                ? "Посылка '%s' обновлена.".formatted(name)
+                : "Посылки '%s' не существует.".formatted(name);
     }
 
     public String loadBoxes(String boxes, String trucks, String strategy) {

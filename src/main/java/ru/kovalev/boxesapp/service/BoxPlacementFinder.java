@@ -119,8 +119,8 @@ public class BoxPlacementFinder {
         }
 
         boolean hasEnoughSupport = supportLength >= halfBoxLength;
-        log.debug("Проверка достаточной поддержки: необходимо {} элементов, найдено {}. Результат = {}"
-                , halfBoxLength, supportLength, hasEnoughSupport);
+        log.debug("Проверка достаточной поддержки: необходимо {} элементов, найдено {}. Результат = {}",
+                halfBoxLength, supportLength, hasEnoughSupport);
         return hasEnoughSupport;
     }
 
